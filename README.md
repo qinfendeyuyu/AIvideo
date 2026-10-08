@@ -4,6 +4,25 @@
 
 **当前定位：可运行的本地生成网关与逐镜工作台，不是一键生成商用精品短剧的成品。**
 
+[界面截图](docs/SCREENSHOTS.md) · [算法与模型](docs/ALGORITHMS_AND_MODELS.md) · [部署指南](docs/PUBLIC_DEPLOYMENT.md) · [Apache-2.0](LICENSE) · [第三方许可](docs/THIRD_PARTY_NOTICES.md)
+
+## 项目截图
+
+下图来自实际运行的工作台，无合成任务或伪造生成结果。拍摄时队列为空、内存预检未通过，因此如实显示提示；这是界面展示，不是 GPU 成片或画质验收。
+
+![AIvideo 本地漫剧工作台真实截图](docs/screenshots/workbench-overview.png)
+
+<details>
+<summary>查看静帧/动态镜头入口与服务检查截图</summary>
+
+![静帧与动态镜头生成表单](docs/screenshots/generation-panels.png)
+
+![服务预检与画质边界](docs/screenshots/service-status.png)
+
+</details>
+
+截图来源、拍摄记录及重拍方法见[截图说明](docs/SCREENSHOTS.md)。
+
 ## 项目状态
 
 - 已实现本地文本、文生图、单首帧图生视频入口、持久化队列、重启接管与素材下载。
@@ -27,6 +46,18 @@
 | Toonflow 接入 | 自定义媒体供应商 TS | 当前版 `generateImage / generateVideo` 协议；无需 API Key |
 
 视频选项“2/3/4秒”是首末帧的采样跨度，按8fps编码后文件通常为2.125/3.125/4.125秒。480×832是近似竖屏，不是精确9:16，也不是原生1080p。放大或插帧不等于补回不存在的细节。
+
+### 使用哪些算法与模型
+
+| 组成 | 算法 / 技术 | 在本项目中的用途 |
+| --- | --- | --- |
+| Qwen2.5 7B | 自回归 Transformer 语言模型 | 草拟剧本和提示词，由人编辑审核 |
+| RealVisXL V5 / SDXL | 潜空间扩散；DPM++ 2M SDE + Karras 调度 | 生成静帧，当前没有角色参考条件或独立 Refiner |
+| Wan2.1 I2V 14B | Flow Matching / DiT、时空 VAE、UMT5 与首帧视觉条件 | 从一张首帧生成短动态镜头，当前没有骨骼或运动轨迹控制 |
+| 低显存运行 | scaled FP8、CPU 卸载、37 层 block swap、串行队列 | 用更多主内存与等待减少显存驻留，不保证提高画质 |
+| 任务可靠性 | JSON 原子落盘、进程锁、已知任务接管、FFmpeg 验证 | 防止盲目重复生成，检查文件完整性，不代替人工审片 |
+
+本仓库**接入已有模型，没有训练或发布自有基础模型**。完整参数、原理、代码对应关系和官方来源见[算法与模型说明](docs/ALGORITHMS_AND_MODELS.md)；权重许可与待核验项见[第三方许可清单](docs/THIRD_PARTY_NOTICES.md)。
 
 ## 开始前需要准备什么
 
@@ -119,7 +150,7 @@ ollama pull qwen2.5:7b
 1. 单独安装和启动当前 Toonflow。
 2. 在“设置 → 媒体模型 → 添加自定义供应商”导入 [localFreeV2.ts](integrations/toonflow/localFreeV2.ts)。
 3. 无需 API Key；供应商固定连接本机18766端口，选择本地图片或 Wan 视频模型。
-4. 不要混用旧的 `localWanComfy.ts`：它是历史协议，不兼容当前 Toonflow。
+4. 旧 `localWanComfy.ts` 已因旧模板许可边界退出当前公开版本，也不兼容当前 Toonflow；本机留存与历史版本见[退役说明](docs/LEGACY_TOONFLOW.md)。
 5. 语言模型可单独配置 Ollama：地址 `http://127.0.0.1:11434/v1`，协议 `openai-completions`，Key留空，模型 `qwen2.5:7b`，上下文4096、最大输出2048。
 
 直接由 Toonflow 调用 Ollama 不受本项目文本入口强制CPU参数控制，建议先写完文本再生成媒体。完整 Toonflow 代理工具调用尚未做端到端验收。详细限制见 [Toonflow 本地接入](docs/TOONFLOW_FREE_LOCAL.md)。
@@ -164,7 +195,9 @@ Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:18766/jobs/image' -Content
 node --experimental-vm-modules .\tests\test_toonflow_provider_contract.mjs
 ```
 
-2026-10-08验证：77项Python测试与供应商13组Node协议测试通过。覆盖外部地址拒绝、输入校验、内存门禁、单worker/进程锁、落盘失败、重启接管、未知提交结果、视频文件验证与取消等待。**协议测试不是GPU样片，更不是商用画质验收。**
+2026-10-08验证：80项Python测试与供应商13组Node协议测试通过。覆盖外部地址拒绝、输入校验、内存门禁、单worker/进程锁、落盘失败、重启接管、未知提交结果、视频文件验证、取消等待，以及文档截图/许可文件检查。**协议测试不是GPU样片，更不是商用画质验收。**
+
+若 Windows 的系统临时目录因权限导致 pytest 初始化失败，可换用一个尚不存在的项目内目录，例如 `--basetemp .pytest-temp-run-001`；不要指向真实素材或已有工作目录，pytest 会管理并清理该目录。本轮完整测试使用了独立项目内临时目录。
 
 ## 目录
 
@@ -175,8 +208,11 @@ integrations/toonflow/ Toonflow媒体供应商
 workflows/            ComfyUI API格式工作流
 configs/              示例配置；个人models.yaml不提交
 tests/                无模型协议/状态测试和诊断合成测试
-docs/                 部署、限制与历史权利记录
+docs/                 部署、算法、截图、第三方许可与历史权利记录
+docs/screenshots/     实际页面截图及拍摄记录
+docs/licenses/        固定版本的第三方许可文本
 assets/fonts/         Noto Sans SC及OFL许可
+LICENSE / NOTICE      Apache-2.0正文与归属声明
 runtime_cache/        运行时任务与素材（Git忽略）
 ```
 
@@ -207,4 +243,16 @@ runtime_cache/        运行时任务与素材（Git忽略）
 - 模型、节点、字体、声音和输入素材各有许可；“本地免费”不等于最终视频已获得所有商业权利。
 - [历史商用权利台账](docs/COMMERCIAL_RIGHTS_LEDGER.md)是指定版本的工程记录，不是对所有输出的保证。
 - Noto Sans SC随附 [OFL 1.1](assets/fonts/NotoSansSC/OFL.txt) 和来源说明；第三方模型及完整上游软件不随仓库分发。
-- 本仓库目前未添加统一开源许可证；公开代码不代表自动授予任意再许可权利，也不能把 Toonflow 的 MIT 套用于其他依赖。
+
+## 开源协议
+
+本项目自有代码与文档采用 **[Apache License 2.0](LICENSE)**，版权及归属声明见 [NOTICE](NOTICE)。它允许在遵守许可条件的前提下使用、修改和分发，并包含贡献者可授权范围内的专利授权；不是对所有专利、商标或输出素材的权利保证。[Apache 官方原文](https://www.apache.org/licenses/LICENSE-2.0)
+
+授权范围需分开看：
+
+- **项目自有代码 / 文档**：Apache-2.0；再分发时遵守许可文本、修改声明及相关归属保留要求。
+- **第三方协议定义 / 字体 / 软件**：保留各自原许可；新版 Toonflow 参考源为 MIT，随附字体为 OFL 1.1，ComfyUI / VideoHelperSuite 则有 GPL 条款，不能全部改标 Apache。
+- **模型权重 / 输入素材 / 生成内容**：不因根许可证而被重新授权。RealVisXL 的 OpenRAIL 使用限制、部分转换组件待补的来源证据、配音和肖像授权等，仍需单独核验。
+- **旧 Toonflow 1.x 历史文件**：当前版本不再分发该旧适配器，Git 历史未改写；根许可证不追溯改变其原附加条款。
+
+具体版本、官方来源和未完成事项见[第三方许可与模型权利清单](docs/THIRD_PARTY_NOTICES.md)。此清单是工程核验记录，不是“所有生成视频均可无条件商用”的承诺。

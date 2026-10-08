@@ -1,0 +1,31 @@
+AIvideo - Local AI Comic Drama Workbench
+Copyright 2026 AIvideo contributors
+
+Original project code and documentation are licensed under the Apache License,
+Version 2.0. See LICENSE. Third-party materials retain their own licenses;
+this notice does not relicense model weights, fonts, dependencies, or outputs.
+
+Toonflow 2.x interoperability reference:
+Copyright (c) 2026 HBAI-Ltd
+https://github.com/HBAI-Ltd/Toonflow-app
+Reference revision: 72a895c26aab3f54c5a914517615362208fa6008.
+The provider integrations/toonflow/localFreeV2.ts uses the upstream public
+provider protocol and is a local implementation, not the full Toonflow app.
+The upstream MIT notice is retained in docs/licenses/Toonflow-72a895c2-MIT.txt.
+
+Noto Sans SC font:
+Copyright 2014-2021 Adobe (http://www.adobe.com/),
+with Reserved Font Name 'Source'.
+The font is distributed under SIL Open Font License 1.1, not Apache-2.0.
+See assets/fonts/NotoSansSC/OFL.txt and its adjacent README.md.
+
+Legacy history notice:
+The Toonflow 1.x provider localWanComfy.ts was removed from the current tree
+after initial publication a2d1fe0. Its template-derived portions retain the
+license at upstream revision e03cf590eb0cab63534a4040db9acb4ec95b42a6,
+including the supplementary terms; the new root LICENSE does not relicense
+that historical material. Git history has not been rewritten.
+See docs/LEGACY_TOONFLOW.md and docs/licenses/Toonflow-legacy-e03cf590-LICENSE.txt.
+
+Further provenance, runtime dependencies, model licenses and unresolved
+weight provenance are documented in docs/THIRD_PARTY_NOTICES.md.

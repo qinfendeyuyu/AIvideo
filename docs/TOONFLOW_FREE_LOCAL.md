@@ -57,7 +57,7 @@ cd E:\AI漫剧\ai-comic-drama
 integrations/toonflow/localFreeV2.ts
 ```
 
-它使用当前 `export default / generateImage / generateVideo` 协议，固定连接本机18766，不要填API Key。供应商仅含上述图片和视频能力。旧 `localWanComfy.ts` 仅适用于旧接口，不能导入 Toonflow 2.x。
+它使用当前 `export default / generateImage / generateVideo` 协议，固定连接本机18766，不要填API Key。供应商仅含上述图片和视频能力。旧 `localWanComfy.ts` 仅适用于旧接口，不能导入 Toonflow 2.x，现已退出当前公开版本；见[旧适配器退役说明](LEGACY_TOONFLOW.md)。
 
 供应商的参考图支持base64/二进制；URL只能来自本机 Toonflow 默认3000端口或网关18766端口，不跟随重定向。多参考图、尾帧、参考视频、配音和不支持的高清参数会明确报错，不静默忽略。取消 Toonflow 的等待不等于取消 GPU 任务，重新提交前先看本机队列，防止重复。
 

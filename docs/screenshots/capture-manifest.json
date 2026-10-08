@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-08T06:51:14.775Z",
+  "source": "Real localhost workbench, no mock data or generated-media examples",
+  "viewport": {
+    "width": 1440,
+    "height": 1100,
+    "device_scale_factor": 1
+  },
+  "generation_panels_expected_size": {
+    "width": 1244,
+    "height": 525
+  },
+  "browser": "151.0.7922.34",
+  "html_sha256": "7145d86a8517e110f71ff02791438cf24a83676283d11aeac7ca1f146f0e6234",
+  "ready": false,
+  "jobs": 0,
+  "cloud_fallback": false,
+  "memory": {
+    "supported": true,
+    "commit_limit_gib": 41.6,
+    "available_commit_gib": 1.25,
+    "available_ram_gib": 4.69,
+    "text_required_gib": 6,
+    "image_required_gib": 8,
+    "video_required_gib": 16,
+    "text_ready": false,
+    "image_ready": false,
+    "video_ready": false
+  },
+  "files": [
+    {
+      "file": "workbench-overview.png",
+      "width": 1440,
+      "height": 1432,
+      "sha256": "ca967cd42205f241dd37f82780c23c98abcdee9901f539d1fa633b462aeacccc"
+    },
+    {
+      "file": "generation-panels.png",
+      "width": 1244,
+      "height": 524,
+      "sha256": "7452eb6f9324f435bff630693607d654cba114202e53e17d8b8f7a8e599d1df2"
+    },
+    {
+      "file": "service-status.png",
+      "width": 612,
+      "height": 763,
+      "sha256": "f273fe52d85359ef1d6d69558f2cb2dab0d176ca97b308a4dc475ed7397c7f11"
+    }
+  ]
+}

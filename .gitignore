@@ -18,6 +18,8 @@ data/inputs/training/
 !/.gitignore
 !/.gitattributes
 !/README.md
+!/LICENSE
+!/NOTICE
 !/requirements.txt
 !/app/
 !/configs/
@@ -39,6 +41,7 @@ data/inputs/training/
 /scripts/*
 !/scripts/*.py
 !/scripts/*.ps1
+!/scripts/capture_project_screenshots.cjs
 /scripts/_*
 /scripts/run_wan_remote_desktop.py
 /scripts/desktop_holiday/
@@ -47,6 +50,23 @@ data/inputs/training/
 !/docs/PUBLIC_DEPLOYMENT.md
 !/docs/TOONFLOW_FREE_LOCAL.md
 !/docs/COMMERCIAL_RIGHTS_LEDGER.md
+!/docs/ALGORITHMS_AND_MODELS.md
+!/docs/THIRD_PARTY_NOTICES.md
+!/docs/SCREENSHOTS.md
+!/docs/LEGACY_TOONFLOW.md
+!/docs/licenses/
+/docs/licenses/*
+!/docs/licenses/Toonflow-72a895c2-MIT.txt
+!/docs/licenses/Toonflow-legacy-e03cf590-LICENSE.txt
+!/docs/screenshots/
+/docs/screenshots/*
+!/docs/screenshots/workbench-overview.png
+!/docs/screenshots/generation-panels.png
+!/docs/screenshots/service-status.png
+!/docs/screenshots/capture-manifest.json
+
+# Retired Toonflow 1.x provider: retained locally, not in current releases.
+/integrations/toonflow/localWanComfy.ts
 
 /assets/*
 !/assets/fonts/

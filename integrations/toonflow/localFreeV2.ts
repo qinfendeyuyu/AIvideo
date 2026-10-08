@@ -1,4 +1,9 @@
-/** Toonflow 2.x provider. Reviewed against upstream 72a895c26aab3f54c5a914517615362208fa6008. */
+/**
+ * Local implementation: Apache-2.0; see LICENSE and NOTICE.
+ * Toonflow 2.x protocol reference: 72a895c26aab3f54c5a914517615362208fa6008.
+ * Upstream attribution: Copyright (c) 2026 HBAI-Ltd, MIT;
+ * see docs/licenses/Toonflow-72a895c2-MIT.txt for the retained notice.
+ */
 type Source =
   | { type: "url"; url: string; mimeType?: string }
   | { type: "base64"; data: string; mimeType: string }

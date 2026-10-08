@@ -11,6 +11,11 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $Root
 
+# Legacy 1.x template is no longer redistributed; see docs/LEGACY_TOONFLOW.md.
+if (-not (Test-Path -LiteralPath (Join-Path $Root "integrations\toonflow\localWanComfy.ts") -PathType Leaf)) {
+  throw "The Toonflow 1.x provider is retired from public releases. Use scripts/start_local_free.ps1 and integrations/toonflow/localFreeV2.ts; see docs/LEGACY_TOONFLOW.md."
+}
+
 if (-not $ComfyPython) {
   $candidates = @(
     (Join-Path $Root ".venv\Scripts\python.exe"),
