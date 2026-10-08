@@ -1,0 +1,59 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1216,
+      "batch_size": 1
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic live-action Chinese period drama, tight 50mm over-the-shoulder medium close-up, cropped at mid-torso. A young adult Chinese maid fills the upper-right quarter, youthful round face large and clearly lit, both eyes tack sharp, natural pores, two low loop buns, gray-blue robe and cream collar, restrained anxious expression. A large blurred dark-teal-robed shoulder fills the left foreground. The maid holds one half-open carved wooden door. Warm face light, cool corridor rim, sharp wood grain, shallow controlled depth of field, original fictional character, clean vertical composition.",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "anime, cartoon, illustration, CGI, wax skin, blurry face, dark face, full body, feet, elderly, mature woman, crown, ornate headdress, front-facing foreground person, tiny face, duplicate face, extra person, bad hands, extra fingers, fused fingers, warped door, bent frame, modern object, text, letters, Chinese characters, sign, logo, watermark, border",
+      "clip": ["1", 1]
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 24090212,
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["10", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/reference_match/s02_attendant_half_open_door/seed_24090212_v2",
+      "images": ["11", 0]
+    }
+  }
+}

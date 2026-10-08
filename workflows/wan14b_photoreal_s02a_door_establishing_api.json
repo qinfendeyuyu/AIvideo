@@ -1,0 +1,135 @@
+{
+  "1": {
+    "class_type": "WanVideoTextEncodeCached",
+    "inputs": {
+      "model_name": "umt5-xxl-enc-fp8_e4m3fn.safetensors",
+      "precision": "bf16",
+      "positive_prompt": "Primary visible action first, matching the input pose: the attendant's LEFT HAND stays on the carved wooden door at screen-right and slowly pushes that same door a few centimeters farther open in one continuous push. Her RIGHT HAND remains near the waist sash exactly as in the input image and does not switch to the door. At the same time her body advances exactly half a step into the doorway; leading foot plants once, trailing foot stays planted as support. Photorealistic live-action-like Chinese period drama, one continuous restrained doorway establishing shot from the input image. Exactly one original adult East Asian junior female attendant, identical round face, straight brows, dark brown eyes, two low loop buns, gray-blue short outer robe and cream inner shirt; three-quarter face stays sharp and identity-stable. Sleeve cuff and robe hem show only small lagging fabric inertia from the left-hand push and half-step. Waist tassel may sway slightly as secondary motion only; do not make tassel swing the hero action. Carved door, straight door frame, threshold and moonlit corridor stay geometrically fixed. Warm candlelight meets cool corridor moonlight, stable exposure. Camera almost locked with under-one-percent breathing, level horizon, same framing. Exactly one person, one left-hand door-push, one half-step, one unbroken shot, no cut, no second person, no readable text, original fictional production, vertical 9:16.",
+      "negative_prompt": "standing still, frozen pose, idle, only clothing flutter, waist tassel swinging as main action, belt swinging hero motion, left hand leaving the door, right hand pushing door, right palm on door, hand switching sides, both hands on door, anime, illustration, painting, cartoon, 3d render, wax skin, plastic skin, excessive beauty filter, lowres, soft face, blurry eyes, face morphing, identity change, age change, face shape change, eye color change, asymmetric eyes, cross-eyed, fused eyelids, deformed mouth, lip movement, talking, open mouth, teeth, head snap, looking back, hairstyle change, bun change, costume change, detached hand, malformed hand, extra fingers, fused fingers, broken wrist, extra arms, extra legs, duplicate body, duplicate person, second person, background person, crowd, floating feet, foot sliding, full step, two steps, repeated stepping, running, teleporting, sudden pose change, door closing, door opening wide, warped door, bent door frame, moving wall, breathing background, warped architecture, changing corridor, modern object, modern clothing, text, letters, Chinese characters, subtitle, sign, logo, watermark, signature, title card, scene cut, jump cut, montage, transition, internal cut, shot reverse shot, camera shake, whip pan, fast zoom, zoom pulse, rolling horizon, perspective jump, motion smear across face, focus hunting, exposure flicker, overexposure, crushed blacks, chromatic aberration, freeze frame, repeated frame, low quality",
+      "quantization": "fp8_e4m3fn",
+      "use_disk_cache": true,
+      "device": "cpu"
+    }
+  },
+  "2": {
+    "class_type": "LoadWanVideoClipTextEncoder",
+    "inputs": {
+      "model_name": "open-clip-xlm-roberta-large-vit-huge-14_visual_fp16.safetensors",
+      "precision": "fp16"
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "photoreal10s/s02_door_establishing_seed_24090202.png"
+    }
+  },
+  "4": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["3", 0],
+      "upscale_method": "lanczos",
+      "width": 480,
+      "height": 832,
+      "crop": "center"
+    }
+  },
+  "5": {
+    "class_type": "WanVideoClipVisionEncode",
+    "inputs": {
+      "clip_vision": ["2", 0],
+      "image_1": ["4", 0],
+      "strength_1": 1.0,
+      "strength_2": 1.0,
+      "crop": "center",
+      "combine_embeds": "average",
+      "force_offload": true
+    }
+  },
+  "6": {
+    "class_type": "WanVideoVAELoader",
+    "inputs": {
+      "model_name": "wan_2.1_vae.safetensors",
+      "precision": "bf16"
+    }
+  },
+  "7": {
+    "class_type": "WanVideoImageToVideoEncode",
+    "inputs": {
+      "width": 480,
+      "height": 832,
+      "num_frames": 17,
+      "noise_aug_strength": 0.11,
+      "start_latent_strength": 1.0,
+      "end_latent_strength": 1.0,
+      "force_offload": true,
+      "vae": ["6", 0],
+      "clip_embeds": ["5", 0],
+      "start_image": ["4", 0]
+    }
+  },
+  "8": {
+    "class_type": "WanVideoModelLoader",
+    "inputs": {
+      "model": "Wan2_1-I2V-14B-480p_fp8_e4m3fn_scaled_KJ.safetensors",
+      "base_precision": "bf16",
+      "quantization": "fp8_e4m3fn_scaled",
+      "load_device": "offload_device"
+    }
+  },
+  "9": {
+    "class_type": "WanVideoBlockSwap",
+    "inputs": {
+      "blocks_to_swap": 37,
+      "offload_img_emb": true,
+      "offload_txt_emb": true,
+      "use_non_blocking": false
+    }
+  },
+  "10": {
+    "class_type": "WanVideoSetBlockSwap",
+    "inputs": {
+      "model": ["8", 0],
+      "block_swap_args": ["9", 0]
+    }
+  },
+  "11": {
+    "class_type": "WanVideoSampler",
+    "inputs": {
+      "model": ["10", 0],
+      "image_embeds": ["7", 0],
+      "text_embeds": ["1", 0],
+      "steps": 20,
+      "cfg": 5.5,
+      "shift": 5.0,
+      "seed": 2409090202,
+      "force_offload": true,
+      "scheduler": "unipc",
+      "riflex_freq_index": 0
+    }
+  },
+  "12": {
+    "class_type": "WanVideoDecode",
+    "inputs": {
+      "vae": ["6", 0],
+      "samples": ["11", 0],
+      "enable_vae_tiling": false,
+      "tile_x": 272,
+      "tile_y": 272,
+      "tile_stride_x": 144,
+      "tile_stride_y": 128
+    }
+  },
+  "13": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["12", 0],
+      "frame_rate": 8.0,
+      "loop_count": 0,
+      "filename_prefix": "photoreal10s/wan_s02a_door_establishing_seed_2409090202",
+      "format": "video/h264-mp4",
+      "pingpong": false,
+      "save_output": true
+    }
+  }
+}

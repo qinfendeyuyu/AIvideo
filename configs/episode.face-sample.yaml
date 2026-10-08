@@ -1,0 +1,18 @@
+# 本机真机验收用：以角色近景为主，便于检查五官清晰度和身份连续性。
+title: "角色试片：雨夜信号"
+premise: >-
+  雨夜地铁站里，调查员苏岚收到一段来自空间裂缝的失踪者语音。
+  全集必须全部是苏岚正脸近景或中近景，四个镜头都必须让苏岚的五官清晰可辨，脸部占画面显著比例；
+  禁止全身远景、背影、多人主构图。
+  她依次发现信号、确认坐标、听见警报、抬头直面裂缝。
+  全部镜头 motion_kind 必须为 dialogue。
+style_prompt: >-
+  semi-realistic Chinese sci-fi comic illustration, cinematic rain-soaked subway,
+  crisp expressive face, detailed eyes, clean facial features, controlled teal and amber lighting,
+  high detail, no text
+characters:
+  - name: "苏岚"
+    appearance: "young Chinese woman, shoulder-length dark blue hair, sharp brown eyes, calm determined expression, clear symmetrical facial features"
+    wardrobe: "cream field jacket, navy turtleneck, holographic wrist device"
+    voice: "Microsoft Huihui Desktop"
+    trigger_words: ["sulan_character", "blue_hair"]

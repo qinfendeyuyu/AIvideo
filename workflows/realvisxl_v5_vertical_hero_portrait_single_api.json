@@ -1,0 +1,59 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 832,
+      "height": 1216,
+      "batch_size": 1
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photorealistic cinematic portrait, original fictional adult Chinese woman, 24 years old, lead character in an original historical costume drama, chest-up close portrait, arms and hands completely outside the frame, head and both shoulders fully visible, refined natural facial features, clear symmetrical eyes, sharp pupils and eyelashes, closed lips, calm but alert expression, natural skin texture and fine pores, long glossy black hair in an elegant ancient updo, original dusty teal silk hanfu with an oxblood red sash and restrained bronze embroidery, one simple bronze and pale jade hair ornament, high-quality historically inspired wardrobe, softly blurred ancient Chinese manor bedroom, warm candle key light with a soft cool window fill, realistic cinematic lighting, 85mm portrait lens, shallow depth of field, precise focus on both eyes, evenly exposed face, subtle film color grade, clean vertical composition, no writing anywhere",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "nsfw, child, teenager, celebrity, famous actress, recognizable real person, copyrighted character, anime, cartoon, illustration, CGI, 3d render, doll, waxy skin, plastic skin, beauty filter, over-smoothed face, lowres, worst quality, blurry, motion blur, out of focus eyes, asymmetrical eyes, crossed eyes, malformed iris, duplicate face, extra face, deformed face, bad anatomy, hand, hands, finger, fingers, arm, arms, raised hand, jewelry covering face, hair covering eyes, open mouth, teeth, tongue, cropped forehead, cropped head, fisheye, wide-angle distortion, overexposed, underexposed, text, caption, subtitles, Chinese characters, letters, numbers, logo, signature, watermark, UI, border",
+      "clip": ["1", 1]
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 146500401,
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["10", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/hero_portrait_single/seed_146500401",
+      "images": ["11", 0]
+    }
+  }
+}

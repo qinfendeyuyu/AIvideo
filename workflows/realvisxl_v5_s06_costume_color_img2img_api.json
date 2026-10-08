@@ -1,0 +1,64 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "s06_base_seed_24090206.png"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic live-action Chinese period drama, preserve the exact same rear-view composition, doors, moon, terrace, distant city gate, pose and lighting. The woman's outer robe is deep dark teal silk, with cream collar trim and a restrained oxblood-red waist sash. Natural textile detail, cinematic moonlit night, face hidden.",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "red outer robe, scarlet robe, crimson outer garment, teal sash, green sash, visible face, front view, changed pose, changed composition, extra person, warped doors, missing moon, blurry architecture, anime, illustration, CGI, text, logo, watermark",
+      "clip": ["1", 1]
+    }
+  },
+  "5": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": ["2", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "6": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 24090227,
+      "steps": 30,
+      "cfg": 4.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 0.45,
+      "model": ["1", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "7": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["6", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "8": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/reference_match/s05_s06_shared_wide_master_city_gate/seed_24090227_colorfix_v2",
+      "images": ["7", 0]
+    }
+  }
+}

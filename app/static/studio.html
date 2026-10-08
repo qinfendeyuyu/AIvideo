@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 漫剧本地剪辑台</title>
+  <style>
+    :root {
+      --bg0: #0f141b;
+      --bg1: #171f29;
+      --panel: rgba(18, 24, 33, 0.72);
+      --ink: #e9eef5;
+      --muted: #94a6ba;
+      --line: rgba(233,238,245,0.12);
+      --accent: #c9974c;
+      --ok: #3dbf8a;
+      --bad: #e26b6b;
+      --warn: #d7b35a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(1100px 520px at 8% -8%, rgba(201,151,76,0.16), transparent 55%),
+        radial-gradient(900px 480px at 100% 0%, rgba(64,110,160,0.14), transparent 50%),
+        linear-gradient(160deg, var(--bg0), var(--bg1));
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.6rem 1.5rem 0.8rem;
+      width: min(1280px, calc(100% - 1.5rem));
+      margin: 0 auto;
+    }
+    h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 650; }
+    .sub { color: var(--muted); margin-top: 0.35rem; line-height: 1.5; }
+    .layout {
+      width: min(1280px, calc(100% - 1.5rem));
+      margin: 0 auto 2rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+      padding: 0.9rem;
+    }
+    .panel h2 {
+      margin: 0 0 0.7rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .run {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink);
+      padding: 0.55rem 0.6rem;
+      margin-bottom: 0.35rem;
+      cursor: pointer;
+    }
+    .run:hover, .run.active { border-color: var(--accent); background: rgba(201,151,76,0.08); }
+    .run .id { font-family: Consolas, monospace; font-size: 0.86rem; }
+    .run .meta { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+    .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+    button, .btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 0.45rem 0.75rem;
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); color: var(--accent); }
+    .status-pill { font-size: 0.8rem; }
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+    .muted { color: var(--muted); }
+    .scene {
+      border-top: 1px solid var(--line);
+      padding: 0.9rem 0;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0.9rem;
+    }
+    @media (max-width: 700px) {
+      .scene { grid-template-columns: 1fr; }
+    }
+    .thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #0b1016;
+      border: 1px solid var(--line);
+    }
+    textarea {
+      width: 100%;
+      min-height: 72px;
+      resize: vertical;
+      background: #0c1219;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 0.5rem;
+      font: inherit;
+    }
+    .scene-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    audio, video { width: 100%; margin-top: 0.45rem; }
+    .empty { color: var(--muted); padding: 1rem 0; }
+    code { color: var(--accent); font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI 漫剧本地剪辑台</h1>
+    <p class="sub">浏览本机 run、预览分镜素材、改旁白并标记重生成。正式出片仍建议用 CLI，避免浏览器长请求超时。</p>
+  </header>
+  <div class="layout">
+    <aside class="panel">
+      <h2>本机 Runs</h2>
+      <div class="toolbar">
+        <button type="button" id="refreshRuns">刷新列表</button>
+        <button type="button" id="refreshHealth">健康检查</button>
+      </div>
+      <div id="health" class="muted" style="margin-bottom:0.7rem;font-size:0.85rem;"></div>
+      <div id="runs"></div>
+    </aside>
+    <section class="panel">
+      <h2>分镜工作区</h2>
+      <div id="workspace" class="empty">选择左侧一个 run 开始审片。</div>
+    </section>
+  </div>
+  <script>
+    let currentRunId = null;
+
+    async function api(path, options) {
+      const res = await fetch(path, options);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || res.statusText);
+      }
+      const type = res.headers.get("content-type") || "";
+      if (type.includes("application/json")) return res.json();
+      return res.text();
+    }
+
+    function statusClass(status) {
+      if (status === "completed") return "ok";
+      if (status === "failed") return "bad";
+      return "warn";
+    }
+
+    async function loadHealth() {
+      const data = await api("/api/v1/health");
+      const ready = data.ready ? "就绪" : "未就绪";
+      document.getElementById("health").innerHTML =
+        `<span class="${data.ready ? "ok" : "bad"}">${ready}</span>` +
+        ` · ${data.video_backend || "-"} · ${data.llm_model || "-"}`;
+    }
+
+    async function loadRuns() {
+      const data = await api("/api/v1/runs");
+      const box = document.getElementById("runs");
+      if (!data.runs || !data.runs.length) {
+        box.innerHTML = `<div class="empty">还没有 run。</div>`;
+        return;
+      }
+      box.innerHTML = data.runs.map((run) => `
+        <button type="button" class="run ${run.run_id === currentRunId ? "active" : ""}" data-id="${run.run_id}">
+          <div class="id">${run.run_id}</div>
+          <div class="meta"><span class="${statusClass(run.status)}">${run.status || "unknown"}</span>
+            · ${run.title || "未命名"} · ${run.updated_at || ""}</div>
+        </button>
+      `).join("");
+      box.querySelectorAll(".run").forEach((el) => {
+        el.onclick = () => openRun(el.dataset.id);
+      });
+    }
+
+    async function openRun(runId) {
+      currentRunId = runId;
+      await loadRuns();
+      const data = await api(`/api/v1/runs/${encodeURIComponent(runId)}`);
+      const scenes = Object.values(data.scenes || {}).sort((a, b) => a.index - b.index);
+      const artifacts = data.artifacts || {};
+      const workspace = document.getElementById("workspace");
+      workspace.innerHTML = `
+        <div class="toolbar">
+          <strong>${data.request?.title || runId}</strong>
+          <span class="status-pill ${statusClass(data.status)}">${data.status}</span>
+          ${artifacts.episode_video ? `<a class="btn" href="/api/v1/runs/${encodeURIComponent(runId)}/video" target="_blank">打开成片</a>` : ""}
+          <button type="button" id="reloadRun">刷新分镜</button>
+        </div>
+        <div class="muted" style="margin-bottom:0.8rem;">输出目录：<code>${data.output_dir || ""}</code></div>
+        ${scenes.length ? scenes.map(sceneCard).join("") : `<div class="empty">尚无分镜素材。</div>`}
+      `;
+      document.getElementById("reloadRun").onclick = () => openRun(runId);
+      workspace.querySelectorAll("[data-save]").forEach((btn) => {
+        btn.onclick = async () => {
+          const index = btn.getAttribute("data-save");
+          const narration = workspace.querySelector(`#narration-${index}`).value;
+          btn.disabled = true;
+          try {
+            await api(`/api/v1/runs/${encodeURIComponent(runId)}/scenes/${index}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ narration, invalidate_audio: true, invalidate_clip: true })
+            });
+            await openRun(runId);
+          } catch (err) {
+            alert("保存失败：" + err.message);
+          } finally {
+            btn.disabled = false;
+          }
+        };
+      });
+    }
+
+    function mediaUrl(runId, rel) {
+      if (!rel) return "";
+      return `/api/v1/runs/${encodeURIComponent(runId)}/file?path=${encodeURIComponent(rel)}`;
+    }
+
+    function sceneCard(scene) {
+      const img = mediaUrl(currentRunId, scene.image);
+      const audio = mediaUrl(currentRunId, scene.audio);
+      const clip = mediaUrl(currentRunId, scene.clip || scene.motion);
+      return `
+        <article class="scene">
+          <div>
+            ${img ? `<img class="thumb" src="${img}" alt="scene ${scene.index}" />` : `<div class="thumb"></div>`}
+            ${audio ? `<audio controls preload="none" src="${audio}"></audio>` : ""}
+            ${clip ? `<video controls preload="none" src="${clip}"></video>` : ""}
+          </div>
+          <div>
+            <div><strong>镜 ${scene.index}</strong>
+              <span class="status-pill ${statusClass(scene.status)}">${scene.status || ""}</span>
+              ${scene.duration_seconds ? `<span class="muted"> · ${scene.duration_seconds}s</span>` : ""}
+            </div>
+            <div class="muted" style="margin:0.35rem 0;">${scene.camera || ""} · ${scene.motion_kind || "dialogue"}</div>
+            <label class="muted" for="narration-${scene.index}">旁白</label>
+            <textarea id="narration-${scene.index}">${scene.narration || ""}</textarea>
+            <div class="scene-actions">
+              <button type="button" data-save="${scene.index}">保存旁白并标记重生成音频/镜头</button>
+            </div>
+            <div class="muted" style="margin-top:0.55rem;font-size:0.82rem;">
+              保存后请在终端执行：
+              <code>.\\scripts\\local_studio.ps1 resume -RunId ${currentRunId} -Input configs\\episode.face-sample.yaml</code>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    document.getElementById("refreshRuns").onclick = loadRuns;
+    document.getElementById("refreshHealth").onclick = loadHealth;
+    loadHealth().catch((e) => { document.getElementById("health").textContent = String(e); });
+    loadRuns().catch((e) => { document.getElementById("runs").textContent = String(e); });
+  </script>
+</body>
+</html>

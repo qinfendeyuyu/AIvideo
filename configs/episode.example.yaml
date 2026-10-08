@@ -1,0 +1,18 @@
+﻿title: "第一集：裂缝之城"
+premise: >-
+  近未来城市出现空间裂缝，主角林曜发现裂缝会吞噬人们的记忆。
+  他与调查员苏岚合作，追查幕后组织，并阻止城市崩坏。
+style_prompt: >-
+  dark futuristic Chinese anime comic, cinematic lighting, detailed ink line art,
+  controlled color palette, consistent faces, no text
+characters:
+  - name: "林曜"
+    appearance: "young Chinese man, short black hair with a silver streak, amber eyes, slim athletic build"
+    wardrobe: "black tactical long coat, dark gray high-collar shirt, worn metal pendant"
+    voice: "lin_yao"
+    trigger_words: ["linyao_character", "silver_hair_streak"]
+  - name: "苏岚"
+    appearance: "young Chinese woman, shoulder-length dark blue hair, sharp brown eyes, calm expression"
+    wardrobe: "cream field jacket, navy turtleneck, holographic wrist device"
+    voice: "su_lan"
+    trigger_words: ["sulan_character", "blue_hair"]

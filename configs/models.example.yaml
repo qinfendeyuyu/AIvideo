@@ -1,0 +1,65 @@
+# Historical episode-pipeline example, NOT the new local-free gateway config.
+# Copy to configs/models.yaml and replace paths before real model execution.
+# The new gateway uses its own fixed local service URLs and workflows.
+# SadTalker / SAPI here are research-only; not cleared for commercial masters.
+project:
+  fps: 12
+  width: 768
+  height: 432
+  max_scene_count: 4
+  output_root: data/outputs
+  seed: 20260805
+  demo_mode: false
+
+llm:
+  backend: ollama_native
+  base_url: http://127.0.0.1:11434
+  api_key: local-key
+  model: qwen2.5:7b
+  timeout_seconds: 240
+  health_path: /api/tags
+  options:
+    num_gpu: 0
+    num_ctx: 2048
+
+image:
+  backend: local_diffusers
+  timeout_seconds: 600
+  steps: 30
+  cfg_scale: 7.5
+  local_diffusers:
+    python_bin: .venv-image/Scripts/python.exe
+    model_path: models/image/your-diffusers-model
+    worker_path: app/workers/diffusers_worker.py
+    device: cuda
+    dtype: float16
+    attention_slicing: true
+    vae_slicing: true
+
+tts:
+  backend: powershell_sapi
+  sapi_script: scripts/sapi_tts.ps1
+  speaker: Microsoft Huihui Desktop
+  speed: 1.0
+  timeout_seconds: 300
+
+video:
+  backend: sadtalker
+  ffmpeg_bin: ffmpeg
+  ffprobe_bin: ffprobe
+  preset: slow
+  crf: 18
+  pix_fmt: yuv420p
+  burn_subtitles: true
+  sadtalker:
+    root_path: third_party/SadTalker
+    python_bin: .venv-sadtalker/Scripts/python.exe
+    inference_script: third_party/SadTalker/inference.py
+    stage_root: runtime_cache/sadtalker
+    size: 256
+    batch_size: 1
+    expression_scale: 0.8
+    preprocess: full
+    fallback_preprocess: crop
+    chunk_seconds: 2.4
+    timeout_seconds: 1800

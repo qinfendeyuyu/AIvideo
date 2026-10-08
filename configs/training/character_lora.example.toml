@@ -1,0 +1,33 @@
+﻿# RTX 4060 Laptop 8GB 的 SD 1.5 LoRA 起始配置（sd-scripts / kohya 系列）。
+# 复制为私有文件，替换所有 D:/... 路径；不要提交私有路径、训练数据或模型权重。
+pretrained_model_name_or_path = "D:/models/sd15_anime_base.safetensors"
+train_data_dir = "D:/AI-comic-data/lin_yao"
+output_dir = "D:/AI-comic-models/lin_yao"
+output_name = "lin_yao_v001"
+
+resolution = "512,512"
+enable_bucket = true
+min_bucket_reso = 512
+max_bucket_reso = 768
+caption_extension = ".txt"
+shuffle_caption = false
+keep_tokens = 1
+
+network_module = "networks.lora"
+network_dim = 16
+network_alpha = 8
+
+train_batch_size = 1
+max_train_epochs = 10
+learning_rate = 0.0001
+optimizer_type = "AdamW8bit"
+lr_scheduler = "cosine"
+lr_warmup_steps = 100
+mixed_precision = "fp16"
+save_precision = "fp16"
+gradient_checkpointing = true
+cache_latents = true
+
+save_every_n_epochs = 1
+save_model_as = "safetensors"
+seed = 20260805

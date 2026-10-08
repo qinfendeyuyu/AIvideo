@@ -1,0 +1,135 @@
+{
+  "1": {
+    "class_type": "WanVideoTextEncodeCached",
+    "inputs": {
+      "model_name": "umt5-xxl-enc-fp8_e4m3fn.safetensors",
+      "precision": "bf16",
+      "positive_prompt": "An adult Chinese fantasy swordsman strides rapidly toward the camera for two weighted steps. His boots contact the stone street clearly and his ponytail and layered coat react with believable inertia. He suddenly hears danger, turns his head and pivots his torso toward screen right, plants the leading foot, grips the scabbard with one hand and draws the straight sword halfway with the other, ending in a guarded stance. Clear large body movement, asymmetric arm motion, realistic balance and footwork, one continuous deliberate action, stable sharp face, same identity, same clothing and accessories, clean stylized 2.5D Chinese donghua animation. The camera performs a restrained dolly-in with a slight low-angle arc. Cinematic warm lantern rim light and deep blue moonlight, detailed stable ancient street, no scene cut.",
+      "negative_prompt": "static pose, subtle motion, tiny motion, symmetric arm swing, floating feet, foot sliding, moonwalk, teleport, sudden scene change, extra person, duplicate body, extra arms, extra legs, fused hands, malformed fingers, broken wrist, deformed sword, face morphing, identity change, hairstyle change, costume change, cropped head, cropped feet, camera shake, whip pan, fast zoom, motion smear over face, blurry face, blurry background, text, letters, Chinese characters, sign, logo, watermark, subtitles, low quality",
+      "quantization": "fp8_e4m3fn",
+      "use_disk_cache": true,
+      "device": "cpu"
+    }
+  },
+  "2": {
+    "class_type": "LoadWanVideoClipTextEncoder",
+    "inputs": {
+      "model_name": "open-clip-xlm-roberta-large-vit-huge-14_visual_fp16.safetensors",
+      "precision": "fp16"
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "redfruit14b/keyframe_00001_.png"
+    }
+  },
+  "4": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["3", 0],
+      "upscale_method": "lanczos",
+      "width": 480,
+      "height": 832,
+      "crop": "center"
+    }
+  },
+  "5": {
+    "class_type": "WanVideoClipVisionEncode",
+    "inputs": {
+      "clip_vision": ["2", 0],
+      "image_1": ["4", 0],
+      "strength_1": 1.0,
+      "strength_2": 1.0,
+      "crop": "center",
+      "combine_embeds": "average",
+      "force_offload": true
+    }
+  },
+  "6": {
+    "class_type": "WanVideoVAELoader",
+    "inputs": {
+      "model_name": "wan_2.1_vae.safetensors",
+      "precision": "bf16"
+    }
+  },
+  "7": {
+    "class_type": "WanVideoImageToVideoEncode",
+    "inputs": {
+      "width": 480,
+      "height": 832,
+      "num_frames": 33,
+      "noise_aug_strength": 0.08,
+      "start_latent_strength": 1.0,
+      "end_latent_strength": 1.0,
+      "force_offload": true,
+      "vae": ["6", 0],
+      "clip_embeds": ["5", 0],
+      "start_image": ["4", 0]
+    }
+  },
+  "8": {
+    "class_type": "WanVideoModelLoader",
+    "inputs": {
+      "model": "Wan2_1-I2V-14B-480p_fp8_e4m3fn_scaled_KJ.safetensors",
+      "base_precision": "bf16",
+      "quantization": "fp8_e4m3fn_scaled",
+      "load_device": "offload_device"
+    }
+  },
+  "9": {
+    "class_type": "WanVideoBlockSwap",
+    "inputs": {
+      "blocks_to_swap": 37,
+      "offload_img_emb": true,
+      "offload_txt_emb": true,
+      "use_non_blocking": false
+    }
+  },
+  "10": {
+    "class_type": "WanVideoSetBlockSwap",
+    "inputs": {
+      "model": ["8", 0],
+      "block_swap_args": ["9", 0]
+    }
+  },
+  "11": {
+    "class_type": "WanVideoSampler",
+    "inputs": {
+      "model": ["10", 0],
+      "image_embeds": ["7", 0],
+      "text_embeds": ["1", 0],
+      "steps": 20,
+      "cfg": 5.0,
+      "shift": 5.0,
+      "seed": 1465001408,
+      "force_offload": true,
+      "scheduler": "unipc",
+      "riflex_freq_index": 0
+    }
+  },
+  "12": {
+    "class_type": "WanVideoDecode",
+    "inputs": {
+      "vae": ["6", 0],
+      "samples": ["11", 0],
+      "enable_vae_tiling": false,
+      "tile_x": 272,
+      "tile_y": 272,
+      "tile_stride_x": 144,
+      "tile_stride_y": 128
+    }
+  },
+  "13": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["12", 0],
+      "frame_rate": 8.0,
+      "loop_count": 0,
+      "filename_prefix": "redfruit14b/action",
+      "format": "video/h264-mp4",
+      "pingpong": false,
+      "save_output": true
+    }
+  }
+}

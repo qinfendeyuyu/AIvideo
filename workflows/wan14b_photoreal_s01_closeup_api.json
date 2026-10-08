@@ -1,0 +1,135 @@
+{
+  "1": {
+    "class_type": "WanVideoTextEncodeCached",
+    "inputs": {
+      "model_name": "umt5-xxl-enc-fp8_e4m3fn.safetensors",
+      "precision": "bf16",
+      "positive_prompt": "Photorealistic live-action-like Chinese period drama, one continuous restrained close-up of the same original adult East Asian female court astronomer from the input image, exact same face identity, facial proportions, age, hairstyle, narrow gold forehead crown, earrings, dark teal cross-collar robe, cream trim and oxblood sash. She begins alert with both eyes open exactly as in the input, hears a distant warning sound, shifts her gaze a few degrees toward screen right, takes one quiet controlled breath and raises her chin only a few millimeters. Her lips remain closed, the jaw and cheeks stay anatomically stable, with at most one tiny natural blink. Only two fine temple hairs and the upper chest from breathing move subtly. Sharp stable eyes, eyelashes, pores, natural skin texture and hair strands; the wooden doorway remains coherent in the softly separated background. Warm interior key light and cool daylight rim. The camera performs a very slow smooth two-percent dolly-in only during the final part. Single shot, single take, no cut, no edit, no transition, no scene change, no reframing jump, realistic temporal continuity, original fictional production, vertical 9:16 composition, no visible text.",
+      "negative_prompt": "anime, illustration, painting, cartoon, 3d render, stylized face, wax skin, plastic skin, excessive beauty filter, lowres, soft face, blurry eyes, blurry background, face morphing, identity change, age change, hairstyle change, crown change, costume change, eye color change, asymmetric eyes, cross-eyed, fused eyelids, deformed mouth, talking, lip movement, open mouth, teeth, exaggerated expression, head turn, large head motion, body sway, shoulder jump, sudden movement, motion smear across face, double face, duplicate person, extra person, extra limbs, extra fingers, warped jewelry, flickering jewelry, breathing background, warped architecture, modern object, modern clothing, text, letters, Chinese characters, subtitle, logo, watermark, signature, title card, scene cut, jump cut, transition, montage, internal cut, camera shake, whip pan, fast zoom, zoom pulse, focus hunting, exposure flicker, overexposure, crushed blacks, chromatic aberration, freeze frame, repeated frame, low quality",
+      "quantization": "fp8_e4m3fn",
+      "use_disk_cache": true,
+      "device": "cpu"
+    }
+  },
+  "2": {
+    "class_type": "LoadWanVideoClipTextEncoder",
+    "inputs": {
+      "model_name": "open-clip-xlm-roberta-large-vit-huge-14_visual_fp16.safetensors",
+      "precision": "fp16"
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "photoreal10s/selected_hero_seed_146500401.png"
+    }
+  },
+  "4": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["3", 0],
+      "upscale_method": "lanczos",
+      "width": 480,
+      "height": 832,
+      "crop": "center"
+    }
+  },
+  "5": {
+    "class_type": "WanVideoClipVisionEncode",
+    "inputs": {
+      "clip_vision": ["2", 0],
+      "image_1": ["4", 0],
+      "strength_1": 1.0,
+      "strength_2": 1.0,
+      "crop": "center",
+      "combine_embeds": "average",
+      "force_offload": true
+    }
+  },
+  "6": {
+    "class_type": "WanVideoVAELoader",
+    "inputs": {
+      "model_name": "wan_2.1_vae.safetensors",
+      "precision": "bf16"
+    }
+  },
+  "7": {
+    "class_type": "WanVideoImageToVideoEncode",
+    "inputs": {
+      "width": 480,
+      "height": 832,
+      "num_frames": 17,
+      "noise_aug_strength": 0.04,
+      "start_latent_strength": 1.0,
+      "end_latent_strength": 1.0,
+      "force_offload": true,
+      "vae": ["6", 0],
+      "clip_embeds": ["5", 0],
+      "start_image": ["4", 0]
+    }
+  },
+  "8": {
+    "class_type": "WanVideoModelLoader",
+    "inputs": {
+      "model": "Wan2_1-I2V-14B-480p_fp8_e4m3fn_scaled_KJ.safetensors",
+      "base_precision": "bf16",
+      "quantization": "fp8_e4m3fn_scaled",
+      "load_device": "offload_device"
+    }
+  },
+  "9": {
+    "class_type": "WanVideoBlockSwap",
+    "inputs": {
+      "blocks_to_swap": 37,
+      "offload_img_emb": true,
+      "offload_txt_emb": true,
+      "use_non_blocking": false
+    }
+  },
+  "10": {
+    "class_type": "WanVideoSetBlockSwap",
+    "inputs": {
+      "model": ["8", 0],
+      "block_swap_args": ["9", 0]
+    }
+  },
+  "11": {
+    "class_type": "WanVideoSampler",
+    "inputs": {
+      "model": ["10", 0],
+      "image_embeds": ["7", 0],
+      "text_embeds": ["1", 0],
+      "steps": 20,
+      "cfg": 5.0,
+      "shift": 5.0,
+      "seed": 2409020101,
+      "force_offload": true,
+      "scheduler": "unipc",
+      "riflex_freq_index": 0
+    }
+  },
+  "12": {
+    "class_type": "WanVideoDecode",
+    "inputs": {
+      "vae": ["6", 0],
+      "samples": ["11", 0],
+      "enable_vae_tiling": false,
+      "tile_x": 272,
+      "tile_y": 272,
+      "tile_stride_x": 144,
+      "tile_stride_y": 128
+    }
+  },
+  "13": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["12", 0],
+      "frame_rate": 8.0,
+      "loop_count": 0,
+      "filename_prefix": "photoreal10s/wan_s01_closeup_seed_2409020101",
+      "format": "video/h264-mp4",
+      "pingpong": false,
+      "save_output": true
+    }
+  }
+}

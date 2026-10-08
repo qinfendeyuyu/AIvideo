@@ -1,0 +1,59 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1216,
+      "batch_size": 1
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic live-action Chinese period drama, 32mm wide rear view. At the lower-right third stands a fictional adult Chinese court astronomer, face hidden, high coiled black updo and narrow gold crown. Her outer robe is unmistakably DARK TEAL with wide cream trim; only her waist sash is OXBLOOD RED. Half-open carved double doors frame a moonlit terrace and distant original city gate tower glowing dark crimson. Straight door frames, sharp wood and roof tiles, deep blue night, warm interior spill, detailed shadows, cinematic vertical composition.",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "red outer robe, scarlet robe, crimson robe, teal belt, green belt, visible face, front view, centered person, extra person, anime, cartoon, illustration, CGI, blurry subject, blurry architecture, muddy background, deformed body, extra limbs, floating feet, cropped head, cropped feet, warped architecture, curved door frame, fully open doors, closed doors, impossible perspective, fisheye, crooked horizon, modern building, electric light, text, Chinese characters, plaque, signboard, logo, watermark",
+      "clip": ["1", 1]
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 24090216,
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["10", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/reference_match/s05_s06_shared_wide_master_city_gate/seed_24090216_v2",
+      "images": ["11", 0]
+    }
+  }
+}

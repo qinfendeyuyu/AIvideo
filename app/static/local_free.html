@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本地漫剧 · 免费模型工作台</title>
+<style>
+:root{color-scheme:dark;--bg:#121918;--panel:#1b2523;--line:#334640;--ink:#f0f3ed;--muted:#b3c1b9;--accent:#bde98e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,"Microsoft YaHei",sans-serif}
+main{max-width:1300px;margin:auto;padding:34px 28px}header{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:26px}
+h1{font-size:30px;letter-spacing:.04em;margin:0}h2{font-size:19px;margin:0 0 14px}p{margin:6px 0}.muted,small{color:var(--muted)}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.15em}
+.tag{border:1px solid var(--line);border-radius:22px;padding:6px 14px;white-space:nowrap}.notice{padding:14px 18px;border-left:3px solid var(--accent);background:var(--panel);margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:23px}label{display:block;margin:14px 0 6px;color:var(--muted);font-size:13px}
+textarea,input,select{font:inherit;color:var(--ink);background:#101916;border:1px solid #496055;border-radius:7px;padding:10px;width:100%}textarea{resize:vertical;min-height:120px}input[type=file]{font-size:13px}
+button{font:inherit;font-weight:650;background:var(--accent);color:#182112;border:0;border-radius:7px;padding:10px 17px;cursor:pointer;margin-top:16px}button:disabled{opacity:.45;cursor:wait}.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:16px}.row>*{flex:1}pre{white-space:pre-wrap;word-break:break-word;font:13px/1.6 ui-monospace,monospace;max-height:260px;overflow:auto}.output{border-top:1px solid var(--line);margin-top:15px;padding-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.full{margin-top:20px}#message{min-height:24px;color:var(--accent)}.jobs{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:16px}.job{border:1px solid var(--line);border-radius:9px;padding:16px;overflow:hidden}.job img,.job video{width:100%;max-height:340px;object-fit:contain;background:#090e0c;margin-top:12px}.job h3{font-size:15px;margin:0}.job p{overflow-wrap:anywhere}.job a{color:var(--accent)}.error{color:#ffa993}details{margin-top:12px}.hidden{display:none!important}a{color:var(--accent)}
+@media(max-width:760px){main{padding:20px 14px}.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:25px}.row{flex-wrap:wrap}}
+</style>
+</head>
+<body><main>
+<header><div><div class="eyebrow">LOCAL PRODUCTION / RTX 4060 · 8GB</div><h1>本地漫剧工作台</h1><p class="muted">先审静帧，再做短镜头；慢速生成，保留每次结果。</p></div><span class="tag">本地模型 · 无付费 API</span></header>
+<div class="notice">本入口只连接本机 Ollama / ComfyUI，不会自动切换云服务。免费指无模型接口费，仍有电费。当前是逐镜素材工作台，不是已完成的一键成片系统；配音、角色一致性和商用审查需单独完成。</div>
+<div id="message" role="status" aria-live="polite"></div>
+<div class="grid">
+<section class="card"><h2>01 / 剧本与英文提示词</h2><p class="muted">Qwen 2.5 7B · CPU 运行，给图像和视频留显存。</p>
+<form id="textForm"><label for="textPrompt">创作要求</label><textarea id="textPrompt" maxlength="6000">为原创古装悬疑短剧写一个三镜头片段。每镜2至4秒，一个成年女侦探在庭院发现线索。每镜包含中文剧情、一个简单动作、英文生图提示词和英文运动提示词。不要模仿已有角色，不要使用人名或明星外貌。</textarea><button id="textButton">生成草案</button></form>
+<div id="textOutput" class="output hidden"></div></section>
+<section class="card"><h2>服务状态</h2><p class="muted">ComfyUI 未启动时，不会用占位图代替真实生成。</p><p id="readiness" role="status">检查中…</p><button type="button" class="secondary" id="refresh">刷新检查</button><details><summary>技术检查详情</summary><pre id="health">检查中…</pre></details>
+<details><summary>画质与使用边界</summary><p>图片：RealVisXL，40步；9:16 原生720×1280。视频：Wan2.1 I2V 14B，20步，原生480×832、8帧/秒，不是原生1080p。</p><p>视频暂只接受单张竖屏首帧、一个短动作、无音轨。8fps 可能不够流畅；更长等待不保证脸部、走路和打斗达标。先试一镜，审片通过后再继续。</p><p>同一工作台内图片和视频串行；不要同时从其他程序提交显卡任务。商用需核验模型、角色素材、字体、音乐和声音，不能仅凭软件免费判断。</p></details></section>
+<section class="card"><h2>02 / 生成静帧</h2><p class="muted">先选清晰的脸、合理的构图，再把通过审查的图交给视频模型。</p>
+<form id="imageForm"><label for="imagePrompt">英文画面描述</label><textarea id="imagePrompt" required maxlength="6000">Cinematic medium close-up of an original fictional adult Chinese female detective in a dusty teal hanfu, both shoulders visible, looking toward a wooden courtyard door, clear natural eyes, sharp facial details, restrained costume, evenly lit face, textured stone courtyard in focus, daylight, original character, no writing</textarea>
+<label for="negative">负面提示词（可选）</label><input id="negative" maxlength="3000" value="blurry face, malformed eyes, extra fingers, duplicate person, text, logo, watermark, low quality">
+<div class="row"><div><label for="ratio">画幅</label><select id="ratio"><option value="9:16">竖屏 720×1280</option><option value="16:9">横屏 1280×720</option><option value="1:1">方形 1024×1024</option></select></div><div><label for="imageSeed">固定种子（可留空）</label><input id="imageSeed" type="number" min="0" max="2147483647" step="1" value="146500401"></div></div><button>静帧加入队列</button></form></section>
+<section class="card"><h2>03 / 生成动态镜头</h2><p class="muted">只生成真实图生视频，不用缩放静图冒充人物动作。</p>
+<form id="videoForm"><label for="firstFrame">已审查的首帧 PNG / JPG / WebP（≤10MB）</label><input id="firstFrame" type="file" accept="image/png,image/jpeg,image/webp" required>
+<label for="videoPrompt">英文动作描述</label><textarea id="videoPrompt" required maxlength="6000">The woman slowly turns her head toward the courtyard door and raises her gaze. Her face and clothing remain consistent. Subtle natural hair movement. Camera gently pushes closer. One continuous shot, natural anatomy, stable background.</textarea>
+<div class="row"><div><label for="duration">目标时长</label><select id="duration"><option value="2">约2秒 / 17帧</option><option value="3">约3秒 / 25帧</option><option value="4">约4秒 / 33帧</option></select></div><div><label for="videoSeed">固定种子（可留空）</label><input id="videoSeed" type="number" min="0" max="2147483647" step="1" value="146500501"></div></div><button>动态镜头加入队列</button></form></section>
+</div>
+<section class="card full"><h2>任务与素材</h2><p class="muted">可以关掉此网页；后台服务仍运行时任务会继续。电脑睡眠会暂停计算。服务重启后会尝试接管已有任务；“需要检查”不会自动重复提交。</p><div class="jobs" id="jobs"></div></section>
+<footer class="muted full"><small>API 文档：<a href="/docs" target="_blank" rel="noopener">本机接口说明</a> · 所有任务保存在本机项目目录 · 请勿把此端口开放到公网。</small></footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const labels = {queued:'排队中',submitting:'提交中',running:'生成中',succeeded:'已完成 · 待审片',failed:'失败',needs_attention:'需要检查'};
+const cards = new Map(); let polling = false;
+function message(text,error=false){$('message').textContent=text;$('message').classList.toggle('error',error);}
+async function request(path,options={}){const r=await fetch(path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});if(!r.ok){let body;try{body=await r.json();}catch{body={detail:`HTTP ${r.status}`};}throw new Error(typeof body.detail==='string'?body.detail:JSON.stringify(body.detail||body));}return r.json();}
+function seed(id){const value=$(id).value;return value===''?{}:{seed:Number(value)};}
+function el(tag,text){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;}
+function renderJob(job){
+ if(!job.id || !/^[0-9a-f-]{36}$/i.test(job.id))return;
+ const signature=JSON.stringify(job);const previous=cards.get(job.id);if(previous&&previous.signature===signature)return;
+ const box=el('article');box.className='job';box.append(el('h3',`${job.kind==='image'?'静帧':'视频'} · ${labels[job.status]||job.status}`));
+ box.append(el('small',job.id));
+ const width=job.native_width, height=job.native_height;
+ if(width&&height)box.append(el('p',`${width}×${height}${job.frames?' · '+job.frames+' 帧 / '+job.fps+'fps':''}`));
+ if(job.prompt){const p=el('p',job.prompt.slice(0,180));p.className='muted';box.append(p);}
+ if(job.error){const p=el('p',job.error);p.className='error';box.append(p);}
+ if(job.status==='succeeded'){
+  // Ignore server-provided URLs: only render this known local route.
+  const asset='/jobs/'+encodeURIComponent(job.id)+'/asset';const media=el(job.kind==='image'?'img':'video');
+  media.src=asset;if(job.kind==='image')media.alt='生成静帧，需人工审查';else{media.controls=true;media.preload='metadata';}
+  box.append(media);const link=el('a','打开 / 保存素材');link.href=asset;link.target='_blank';link.rel='noopener';box.append(link);
+  if(job.kind==='image'){const button=el('button','用作视频首帧');button.type='button';button.className='secondary';button.onclick=async()=>{try{const r=await fetch(asset);if(!r.ok)throw Error('读取静帧失败');const file=new File([await r.blob()],'reviewed-frame.png',{type:'image/png'});const transfer=new DataTransfer();transfer.items.add(file);$('firstFrame').files=transfer.files;$('firstFrame').scrollIntoView({behavior:'smooth',block:'center'});message('已选择首帧。请确认五官、服装和背景合格，再提交视频。');}catch(e){message(e.message,true);}};box.append(button);}
+ }
+ if(previous)previous.node.replaceWith(box);else $('jobs').prepend(box);cards.set(job.id,{signature,node:box,status:job.status});
+}
+async function loadJobs(){if(polling)return;polling=true;try{const data=await request('/jobs');const jobs=Array.isArray(data)?data:(data.jobs||[]);if(!jobs.length&&!cards.size)$('jobs').textContent='还没有任务。先生成一张静帧。';else{if(!cards.size)$('jobs').textContent='';jobs.forEach(renderJob);}}catch(e){message('任务查询失败：'+e.message,true);}finally{polling=false;}}
+async function health(){try{const status=await request('/health');$('health').textContent=JSON.stringify(status,null,2);const mem=status.memory||{};let summary=status.ready?'模型服务与内存预检通过。生成后仍需人工审片。':'尚未具备完整生成条件，请查看技术检查详情。';if(mem.supported&&!mem.video_ready)summary=`当前可用提交内存 ${mem.available_commit_gib}GB，图片预检需 ${mem.image_required_gib}GB，视频需 ${mem.video_required_gib}GB。请关闭不用的软件，再点“刷新检查”；不会自动关闭程序或降低画质。`;if(status.queue_paused)summary+=' 队列已暂停：存在结果未知的任务，需要先人工核对。';$('readiness').textContent=summary;$('readiness').classList.toggle('error',!status.ready);}catch(e){$('health').textContent='连接失败：'+e.message;$('readiness').textContent='本地后台没有响应，请检查启动日志。';$('readiness').classList.add('error');}}
+async function submit(form,route,payload){const button=form.querySelector('button');button.disabled=true;try{const job=await request(route,{method:'POST',body:JSON.stringify(payload)});if(!cards.size)$('jobs').textContent='';renderJob(job);message('已加入本机队列。无需反复点击，任务按顺序执行。');await loadJobs();}finally{button.disabled=false;}}
+$('textForm').onsubmit=async event=>{event.preventDefault();$('textButton').disabled=true;$('textOutput').classList.remove('hidden');$('textOutput').textContent='本机 CPU 正在生成，可能需要数分钟…';try{const data=await request('/text',{method:'POST',body:JSON.stringify({prompt:$('textPrompt').value})});$('textOutput').textContent=data.text||data.content||JSON.stringify(data,null,2);}catch(e){$('textOutput').textContent=e.message;message(e.message,true);}finally{$('textButton').disabled=false;}};
+$('imageForm').onsubmit=async event=>{event.preventDefault();try{await submit(event.currentTarget,'/jobs/image',{prompt:$('imagePrompt').value,negative_prompt:$('negative').value,aspect_ratio:$('ratio').value,...seed('imageSeed')});}catch(e){message(e.message,true);}};
+function readFile(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('读取首帧失败'));reader.readAsDataURL(file);});}
+$('videoForm').onsubmit=async event=>{event.preventDefault();const form=event.currentTarget;try{const file=$('firstFrame').files[0];if(!file||file.size>10*1024*1024)throw Error('请选择不超过10MB的首帧图片');const image=await readFile(file);await submit(form,'/jobs/video',{prompt:$('videoPrompt').value,image,duration:Number($('duration').value),aspect_ratio:'9:16',...seed('videoSeed')});}catch(e){message(e.message,true);}};
+$('refresh').onclick=()=>Promise.all([health(),loadJobs()]);
+health();loadJobs();setInterval(()=>{if(!document.hidden)loadJobs();},5000);
+</script></body></html>

@@ -1,0 +1,74 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "RealVisXL_V5.0_fp16.safetensors"}
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {"image": "s06_base_seed_24090206.png"}
+  },
+  "3": {
+    "class_type": "LoadImageMask",
+    "inputs": {"image": "s06_red_robe_mask.png", "channel": "red"}
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic rear view of the same woman, deep dark teal silk outer robe with realistic folds and moonlit highlights, wide cream collar trim, restrained oxblood-red waist sash, historically inspired Chinese period costume, preserve pose and anatomy, face hidden",
+      "clip": ["1", 1]
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "red outer robe, scarlet robe, crimson outer garment, teal sash, green sash, changed body, extra limb, missing arm, visible face, anime, illustration, CGI, blurry fabric, text, logo, watermark",
+      "clip": ["1", 1]
+    }
+  },
+  "6": {
+    "class_type": "VAEEncodeForInpaint",
+    "inputs": {
+      "pixels": ["2", 0],
+      "vae": ["1", 2],
+      "mask": ["3", 0],
+      "grow_mask_by": 8
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 24090228,
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["4", 0],
+      "negative": ["5", 0],
+      "latent_image": ["6", 0]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["7", 0], "vae": ["1", 2]}
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": ["2", 0],
+      "source": ["8", 0],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": ["3", 0]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/reference_match/s05_s06_shared_wide_master_city_gate/seed_24090228_costume_inpaint",
+      "images": ["9", 0]
+    }
+  }
+}

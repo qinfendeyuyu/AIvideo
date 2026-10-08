@@ -1,0 +1,59 @@
+{
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "animagine-xl-3.1.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 768,
+      "height": 1344,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "masterpiece, best quality, very aesthetic, absurdres, original character, adult man, Chinese fantasy swordsman, stylized 2.5D donghua, semi-realistic anime, cinematic cel shading, sharp detailed face, amber eyes, shoulder-length black hair in a high ponytail, dark navy layered hanfu with subtle silver trim, narrow red waist sash, leather wrist guards, straight sheathed sword at left waist, athletic proportional body, three-quarter full body, both hands visible, walking toward viewer, determined calm expression, ancient Chinese stone street at night, warm paper lanterns with no writing, deep blue moonlight, volumetric rim light, clean background, strong foreground middle ground depth, centered vertical composition, knees and feet visible, no crop",
+      "clip": ["4", 1]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "nsfw, child, teenager, famous character, copyrighted character, artist name, lowres, worst quality, low quality, normal quality, blurry, soft face, bad anatomy, bad hands, malformed hands, extra fingers, missing fingers, extra arms, extra legs, fused limbs, duplicate person, multiple views, text, Chinese characters, letters, sign, logo, signature, watermark, username, frame, border, cropped head, cropped feet, close-up, fisheye, overexposed",
+      "clip": ["4", 1]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 146500406,
+      "steps": 28,
+      "cfg": 7.0,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["8", 0],
+      "vae": ["4", 2]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "redfruit14b/keyframe",
+      "images": ["9", 0]
+    }
+  }
+}

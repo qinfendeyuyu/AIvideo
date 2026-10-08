@@ -1,0 +1,59 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1216,
+      "batch_size": 1
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic cinematic 90mm overhead macro, a richly detailed original ancient astronomical chart on aged tan rice paper lying on a dark wooden desk. Dozens of tiny indigo mineral star dots connected by delicate charcoal geometric lines, concentric orbital arcs, one small abstract gate-shaped marker near the upper-right. Irregular paper fibers, worn curled edges, subtle wax stains, pigment granulation, tiny dust. Warm candlelit vignette, cool moon edge light, sharp details, nonlinguistic geometry, empty space for a later red effect, no people, no writing.",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "person, face, body, hand, fingers, copied artwork, geographic map, anime, cartoon, CGI, blank white paper, minimal circles, red sunburst, yarn, thread, blurry, soft focus, muddy pigment, warped paper, printed grid, compass rose, readable text, Chinese characters, letters, alphabet, numbers, calligraphy, handwriting, label, seal, stamp, logo, watermark, border",
+      "clip": ["1", 1]
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 24090214,
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["10", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "realvisxl_v5/reference_match/s04_abstract_star_map_no_text/seed_24090214_v2",
+      "images": ["11", 0]
+    }
+  }
+}
