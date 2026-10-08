@@ -56,3 +56,43 @@ def test_readme_includes_public_documentation_entrypoints():
     ):
         assert f"]({target})" in readme
         assert (ROOT / target).is_file()
+
+
+def test_walkthrough_gif_is_complete_and_animated():
+    folder = ROOT / "docs" / "screenshots"
+    manifest = json.loads((folder / "walkthrough-manifest.json").read_text(encoding="utf-8"))
+    asset = manifest["asset"]
+    gif_path = folder / "generation-walkthrough.gif"
+    raw = gif_path.read_bytes()
+    assert asset["file"] == gif_path.name
+    assert len(raw) == asset["bytes"] < 8 * 1024**2
+    assert hashlib.sha256(raw).hexdigest() == asset["sha256"]
+    with Image.open(gif_path) as gif:
+        assert gif.format == "GIF" and gif.is_animated
+        assert gif.info["loop"] == 0
+        assert gif.size == (asset["width"], asset["height"]) == (1280, 900)
+        assert gif.n_frames == asset["frames"] >= 20
+        duration_ms = 0
+        for index in range(gif.n_frames):
+            gif.seek(index)
+            gif.load()
+            assert gif.info["duration"] > 0
+            duration_ms += gif.info["duration"]
+        assert abs(duration_ms / 1000 - asset["duration_seconds"]) < 0.1
+
+
+def test_walkthrough_provenance_and_readme_embed():
+    manifest = json.loads((ROOT / "docs" / "screenshots" / "walkthrough-manifest.json").read_text(encoding="utf-8"))
+    assert manifest["mocked_api_responses"] is False
+    assert manifest["edited_timing"] is True
+    assert manifest["image_requests"] == 1 and manifest["image_response_status"] == 503
+    assert "可用提交内存不足" in manifest["image_response_detail"]
+    assert manifest["video_requests"] == manifest["text_requests"] == manifest["final_jobs"] == 0
+    assert len(manifest["steps"]) == 10
+    html = (ROOT / "app" / "static" / "local_free.html").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(html).hexdigest() == manifest["html_sha256"]
+    assert manifest["upload_demo_source"] == "docs/screenshots/workbench-overview.png"
+    assert hashlib.sha256((ROOT / manifest["upload_demo_source"]).read_bytes()).hexdigest() == manifest["upload_demo_sha256"]
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "](docs/screenshots/generation-walkthrough.gif)" in readme
+    assert "](docs/GENERATION_WALKTHROUGH.md)" in readme

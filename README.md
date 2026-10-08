@@ -6,6 +6,16 @@
 
 [界面截图](docs/SCREENSHOTS.md) · [算法与模型](docs/ALGORITHMS_AND_MODELS.md) · [部署指南](docs/PUBLIC_DEPLOYMENT.md) · [Apache-2.0](LICENSE) · [第三方许可](docs/THIRD_PARTY_NOTICES.md)
 
+## 操作动图
+
+约 27 秒、515 KiB：填写提示词 → 设置画幅与种子 → 点击静帧提交 → 读取真实内存拦截 → 选择首帧文件并设置视频参数 → 查看任务区。
+
+![AIvideo 真实操作演示：填写参数、提交静帧、查看内存拦截及设置视频首帧](docs/screenshots/generation-walkthrough.gif)
+
+**这是操作教程，不是成功生成样片：** 录制时内存不足，静帧请求真实返回 HTTP 503，没有任务入队。首帧选择用已公开的工作台截图演示，未提交视频；没有伪造进度、素材或成功状态。顶部步骤条、黄色高亮和光标为录制注释，操作节奏经过剪辑，不代表模型生成速度。
+
+逐步文字说明、录制来源和重录方法见[操作动图说明](docs/GENERATION_WALKTHROUGH.md)。
+
 ## 项目截图
 
 下图来自实际运行的工作台，无合成任务或伪造生成结果。拍摄时队列为空、内存预检未通过，因此如实显示提示；这是界面展示，不是 GPU 成片或画质验收。
@@ -195,7 +205,7 @@ Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:18766/jobs/image' -Content
 node --experimental-vm-modules .\tests\test_toonflow_provider_contract.mjs
 ```
 
-2026-10-08验证：80项Python测试与供应商13组Node协议测试通过。覆盖外部地址拒绝、输入校验、内存门禁、单worker/进程锁、落盘失败、重启接管、未知提交结果、视频文件验证、取消等待，以及文档截图/许可文件检查。**协议测试不是GPU样片，更不是商用画质验收。**
+2026-10-08验证：82项Python测试与供应商13组Node协议测试通过。覆盖外部地址拒绝、输入校验、内存门禁、单worker/进程锁、落盘失败、重启接管、未知提交结果、视频文件验证、取消等待，以及文档截图、动图完整性与许可文件检查。**协议测试不是GPU样片，更不是商用画质验收。**
 
 若 Windows 的系统临时目录因权限导致 pytest 初始化失败，可换用一个尚不存在的项目内目录，例如 `--basetemp .pytest-temp-run-001`；不要指向真实素材或已有工作目录，pytest 会管理并清理该目录。本轮完整测试使用了独立项目内临时目录。
 

@@ -42,6 +42,7 @@ data/inputs/training/
 !/scripts/*.py
 !/scripts/*.ps1
 !/scripts/capture_project_screenshots.cjs
+!/scripts/record_generation_walkthrough.cjs
 /scripts/_*
 /scripts/run_wan_remote_desktop.py
 /scripts/desktop_holiday/
@@ -53,6 +54,7 @@ data/inputs/training/
 !/docs/ALGORITHMS_AND_MODELS.md
 !/docs/THIRD_PARTY_NOTICES.md
 !/docs/SCREENSHOTS.md
+!/docs/GENERATION_WALKTHROUGH.md
 !/docs/LEGACY_TOONFLOW.md
 !/docs/licenses/
 /docs/licenses/*
@@ -64,6 +66,8 @@ data/inputs/training/
 !/docs/screenshots/generation-panels.png
 !/docs/screenshots/service-status.png
 !/docs/screenshots/capture-manifest.json
+!/docs/screenshots/generation-walkthrough.gif
+!/docs/screenshots/walkthrough-manifest.json
 
 # Retired Toonflow 1.x provider: retained locally, not in current releases.
 /integrations/toonflow/localWanComfy.ts

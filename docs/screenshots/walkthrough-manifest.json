@@ -1,0 +1,72 @@
+{
+  "captured_at": "2026-10-08T06:58:42.381Z",
+  "source": "Real local workbench with clearly labeled recording annotations",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "browser": "151.0.7922.34",
+  "html_sha256": "7145d86a8517e110f71ff02791438cf24a83676283d11aeac7ca1f146f0e6234",
+  "mocked_api_responses": false,
+  "edited_timing": true,
+  "image_requests": 1,
+  "image_response_status": 503,
+  "image_response_detail": "可用提交内存不足：当前 5.63 GiB，本地图片至少需要 8 GiB。请保存工作并关闭其他占用内存的应用后重试；程序不会关闭应用或修改虚拟内存。",
+  "video_requests": 0,
+  "text_requests": 0,
+  "final_jobs": 0,
+  "upload_demo_source": "docs/screenshots/workbench-overview.png",
+  "upload_demo_sha256": "ca967cd42205f241dd37f82780c23c98abcdee9901f539d1fa633b462aeacccc",
+  "steps": [
+    {
+      "title": "01 / 先检查本机服务与内存",
+      "description": "真实界面录制：当前内存不足；下面演示操作与真实拦截，不展示生成成功。"
+    },
+    {
+      "title": "02 / 填写剧本需求（也可直接使用自己的提示词）",
+      "description": "文本入口使用本机 CPU。本次只填写示例，不启动语言模型。"
+    },
+    {
+      "title": "03 / 写清静帧：人物、构图、光线和背景",
+      "description": "先检查清晰的脸和合理构图，再把合格静帧用于图生视频。"
+    },
+    {
+      "title": "04 / 选择画幅，固定种子方便复查",
+      "description": "示例：竖屏 720 × 1280。固定 seed 有助于记录，但不保证角色跨镜头一致。"
+    },
+    {
+      "title": "05 / 点击“静帧加入队列”",
+      "description": "本次会实际提交一次图片请求；保留网关返回的真实结果，不绕过内存预检。"
+    },
+    {
+      "title": "06 / 看懂返回：内存不足，没有入队",
+      "description": "真实 HTTP 503：先保存工作、释放内存再刷新。不要反复点击，也不要关闭保护。"
+    },
+    {
+      "title": "07 / 合格静帧 → 视频首帧",
+      "description": "这里只用已公开的工作台截图演示选文件；不是人物首帧，不会提交它生成视频。"
+    },
+    {
+      "title": "08 / 设置一个简单动作与短镜头时长",
+      "description": "示例：缓慢转头、轻微推进；从约 2 秒开始，生成后仍需人工审片。"
+    },
+    {
+      "title": "09 / 实际制作时，审查首帧后再提交动态镜头",
+      "description": "当前内存未通过，且所选文件仅用于演示。本次不点击视频提交、不启动 GPU 推理。"
+    },
+    {
+      "title": "10 / 到任务区查看状态与素材",
+      "description": "当前确实没有任务。真正生成成功后才会出现预览和保存入口；随后人工审片。"
+    }
+  ],
+  "asset": {
+    "file": "generation-walkthrough.gif",
+    "bytes": 527006,
+    "sha256": "31d9ce9b562da82e2085d85c4f201efe8155354e23d4c4e92685b2f550a04dec",
+    "width": 1280,
+    "height": 900,
+    "frames": 214,
+    "duration_seconds": 26.76
+  },
+  "capture_frames": 27
+}

@@ -12,5 +12,6 @@
 *.ps1 text eol=crlf
 *.ttf binary
 *.png binary
+*.gif binary
 LICENSE text eol=lf
 NOTICE text eol=lf
