@@ -134,6 +134,8 @@ node_modules/
 *.onnx
 *.gguf
 *.mp4
+!docs/samples/wan_30s_preview/preview_concat.mp4
+!docs/samples/wan_30s_preview/clips/*.mp4
 *.mov
 *.wav
 *.mp3
