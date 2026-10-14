@@ -63,6 +63,7 @@ data/inputs/training/
 !/docs/GENERATION_WALKTHROUGH.md
 !/docs/LEGACY_TOONFLOW.md
 !/docs/SAMPLES.md
+!/docs/RELEASE_NOTES_v0.2.1.md
 !/docs/EVALUATION.md
 !/docs/samples/
 /docs/samples/*
