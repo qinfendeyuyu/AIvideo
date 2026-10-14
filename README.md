@@ -34,7 +34,7 @@
 | 代码 | 仓库 Python ≈ 1.5 万行（`app/` · `scripts/` · `tests/`）；网关为当前正式入口 |
 | 测试 | 2026-10-08：`pytest` **82** 项 + Toonflow 供应商 Node 协议 **13** 组通过 |
 | 运行时 | 网关 `127.0.0.1:18766` · Ollama `:11434` · ComfyUI `:8488`（须同机） |
-| 交付物 | 中英 README · 截图/操作动图 · Apache-2.0 · 第三方许可台账 |
+| 交付物 | 中英 README · 本地 Wan 样片 6 镜 · 截图/操作动图 · Apache-2.0 |
 | 诚实边界 | **尚未**完成干净新机 GPU 端到端复现，也**未**做与商用样片同等画质验收 |
 
 | 常见期望 | 本项目实际 |
@@ -47,6 +47,25 @@
 “免费”= 不调用按次收费模型 API；仍有硬件、电费、存储与人工成本。模型权重不随仓库分发。
 
 **自荐 / 仓库设置**：[docs/gitee-自荐文案.md](docs/gitee-自荐文案.md) · [docs/gitee-仓库设置.md](docs/gitee-仓库设置.md) · 边界见 [docs/EVALUATION.md](docs/EVALUATION.md)。
+
+---
+
+## 本地生成样片
+
+**司天署·30 秒画质试片**（Wan2.1 I2V 14B FP8 · 480×832 · 16fps · RTX 4060 8GB）。6 镜顺序拼接，总长 **18.4s**：
+
+<p align="center">
+  <video src="docs/samples/wan_30s_preview/preview_concat.mp4" controls width="100%" poster="docs/samples/wan_30s_preview/poster.png">
+    您的浏览器不支持内嵌播放，请直接打开
+    <a href="docs/samples/wan_30s_preview/preview_concat.mp4">preview_concat.mp4</a>
+  </video>
+</p>
+
+| P01 睁眼 | P03 侍从急报 | P06 城门异光 |
+|:---:|:---:|:---:|
+| <video src="docs/samples/wan_30s_preview/clips/00_P01.mp4" controls width="100%"></video> | <video src="docs/samples/wan_30s_preview/clips/02_P03.mp4" controls width="100%"></video> | <video src="docs/samples/wan_30s_preview/clips/05_P06.mp4" controls width="100%"></video> |
+
+> **工程预览，不是商用验收**：P01–P03 约 5s/镜，P04–P06 约 1s/镜（参数不一致）；P04–P05 为远程 harvest 后同步。仅证明本机链路能出片，不承诺干净新机复现或参考样片同等画质。分镜元数据见 [docs/SAMPLES.md](docs/SAMPLES.md)。
 
 ---
 
@@ -226,7 +245,8 @@ node --experimental-vm-modules .\tests\test_toonflow_provider_contract.mjs
 | [算法与模型](docs/ALGORITHMS_AND_MODELS.md) | 模型原理与代码对应 |
 | [评测与诚实边界](docs/EVALUATION.md) | 测了什么、没测什么 |
 | [路线图](docs/ROADMAP.md) | 已交付 / 待办 / 不做 |
-| [截图说明](docs/SCREENSHOTS.md) · [操作动图](docs/GENERATION_WALKTHROUGH.md) | 素材来源 |
+| [本地样片](docs/SAMPLES.md) | Wan 试片来源与边界 |
+| [截图说明](docs/SCREENSHOTS.md) · [操作动图](docs/GENERATION_WALKTHROUGH.md) | 界面素材来源 |
 | [第三方许可](docs/THIRD_PARTY_NOTICES.md) | 模型与依赖权利 |
 | [贡献指南](CONTRIBUTING.md) · [贡献者](CONTRIBUTORS.md) · [安全披露](SECURITY.md) | 社区 |
 

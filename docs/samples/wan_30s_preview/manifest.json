@@ -1,0 +1,84 @@
+{
+  "id": "wan_30s_quality_preview_20260927",
+  "title": "司天署·30秒画质试片",
+  "logline": "女司历闻警、侍从急报、起身见城门异光。",
+  "generated_at": "2026-09-27 — 2026-10-14",
+  "hardware": "RTX 4060 Laptop 8GB · i7-14650HX · 32GB RAM",
+  "pipeline": "RealVisXL V5 关键帧 + Wan2.1 I2V 14B FP8 / ComfyUI-WanVideoWrapper",
+  "native": {
+    "width": 480,
+    "height": 832,
+    "fps": 16
+  },
+  "concat": {
+    "path": "preview_concat.mp4",
+    "duration_sec": 18.375,
+    "size_bytes": 3673996,
+    "shots": 6
+  },
+  "clips": [
+    {
+      "id": "P01",
+      "file": "clips/00_P01.mp4",
+      "scene": "desk",
+      "duration_sec": 5.0625,
+      "frames": 81,
+      "host": "local",
+      "finished_at": "2026-09-27T10:29:09",
+      "elapsed_sec": 3589.2
+    },
+    {
+      "id": "P02",
+      "file": "clips/01_P02.mp4",
+      "scene": "desk",
+      "duration_sec": 5.0625,
+      "frames": 81,
+      "host": "local",
+      "finished_at": "2026-09-27T12:02:53",
+      "elapsed_sec": 3616.7
+    },
+    {
+      "id": "P03",
+      "file": "clips/02_P03.mp4",
+      "scene": "attendant",
+      "duration_sec": 5.0625,
+      "frames": 81,
+      "host": "local",
+      "finished_at": "2026-09-27T13:02:39",
+      "elapsed_sec": 3586.1
+    },
+    {
+      "id": "P04",
+      "file": "clips/03_P04.mp4",
+      "scene": "hero_reply",
+      "duration_sec": 1.0625,
+      "frames": 17,
+      "host": "desktop-harvest",
+      "finished_at": "2026-10-14T08:38:18"
+    },
+    {
+      "id": "P05",
+      "file": "clips/04_P05.mp4",
+      "scene": "rise",
+      "duration_sec": 1.0625,
+      "frames": 17,
+      "host": "desktop-harvest",
+      "finished_at": "2026-10-14T08:38:18"
+    },
+    {
+      "id": "P06",
+      "file": "clips/05_P06.mp4",
+      "scene": "terrace",
+      "duration_sec": 1.0625,
+      "frames": 17,
+      "host": "local",
+      "finished_at": "2026-10-14T08:56:11",
+      "elapsed_sec": 931.3
+    }
+  ],
+  "notes": [
+    "P01–P03 为 81 帧 / ~5s；P04–P06 为 17 帧 / ~1s，同一试片内参数不一致，仅作工程预览。",
+    "不是商用短剧画质验收，不承诺角色一致性、口型或复杂运镜达到样片级。",
+    "源分镜见 data/outputs/wan_30s_preview_20260927/storyboard_30s.json（不随仓库分发）。"
+  ]
+}

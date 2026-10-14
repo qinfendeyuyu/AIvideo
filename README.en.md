@@ -45,6 +45,16 @@ Open-source **local generation gateway** for Windows + NVIDIA (Apache-2.0): Olla
 
 Walkthrough GIF (real 503 on low memory): [`docs/screenshots/generation-walkthrough.gif`](docs/screenshots/generation-walkthrough.gif)
 
+## Local samples
+
+**Wan 30s quality preview** — 6 chained I2V shots (480×832 · 16fps · RTX 4060 8GB), concat **18.4s**:
+
+<p align="center">
+  <video src="docs/samples/wan_30s_preview/preview_concat.mp4" controls width="100%" poster="docs/samples/wan_30s_preview/poster.png"></video>
+</p>
+
+Engineering preview only — not a commercial-quality claim. Details: [docs/SAMPLES.md](docs/SAMPLES.md)
+
 ## Quick start
 
 ```powershell
