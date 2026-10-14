@@ -70,9 +70,9 @@ data/inputs/training/
 !/docs/GENERATION_WALKTHROUGH.md
 !/docs/LEGACY_TOONFLOW.md
 !/docs/SAMPLES.md
-!/docs/RELEASE_NOTES_v0.2.1.md
-!/docs/gitee-每周精选-Issue草稿.md
 !/docs/EVALUATION.md
+!/docs/ROADMAP.md
+!/docs/项目简介.md
 !/docs/samples/
 /docs/samples/*
 !/docs/samples/wan_30s_preview/
@@ -86,15 +86,6 @@ data/inputs/training/
 !/docs/samples/wan_30s_preview/clips/
 /docs/samples/wan_30s_preview/clips/*
 !/docs/samples/wan_30s_preview/clips/*.mp4
-!/docs/EVALUATION.md
-!/docs/ROADMAP.md
-!/docs/项目简介.md
-!/docs/gitee-自荐文案.md
-!/docs/gitee-仓库设置.md
-!/docs/issue-templates/
-/docs/issue-templates/*
-!/docs/issue-templates/bug.md
-!/docs/issue-templates/feature.md
 !/docs/licenses/
 /docs/licenses/*
 !/docs/licenses/Toonflow-72a895c2-MIT.txt

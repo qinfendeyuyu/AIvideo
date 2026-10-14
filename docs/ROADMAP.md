@@ -6,7 +6,7 @@
 - Windows 提交内存预检；loopback-only；未知提交暂停队列  
 - Toonflow 2.x 自定义媒体供应商（当前协议）  
 - 协议与状态机测试基线；截图、操作动图、算法与第三方许可文档  
-- Gitee 主入口工程文档体例（README / EVALUATION / 自荐清单）
+- Gitee 主入口工程文档体例（README / EVALUATION / ROADMAP）
 
 ## 近期待办
 
