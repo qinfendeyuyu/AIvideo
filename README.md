@@ -1,9 +1,10 @@
 <h1 align="center">
-  AIvideo · 免费本地 AI 漫剧工作台
+  镜语 · JingYu
 </h1>
 
 <p align="center">
-  <strong>Local AI Comic-Drama Workbench</strong><br/>
+  <strong>免费本地 AI 漫剧工作台</strong><br/>
+  Local AI Comic-Drama Workbench<br/>
   中文 · <a href="./README.en.md">English</a>
 </p>
 
@@ -83,7 +84,7 @@
 约 27 秒操作动图（填写参数 → 提交静帧 → 真实内存拦截 → 设置视频首帧）：
 
 <p align="center">
-  <img alt="AIvideo 操作演示" src="docs/screenshots/generation-walkthrough.gif" width="100%"/>
+  <img alt="镜语操作演示" src="docs/screenshots/generation-walkthrough.gif" width="100%"/>
 </p>
 
 > **操作教程，不是成功样片**：录制时内存不足，静帧真实返回 HTTP 503；未伪造进度或成片。说明见 [GENERATION_WALKTHROUGH.md](docs/GENERATION_WALKTHROUGH.md)。

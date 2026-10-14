@@ -1,6 +1,6 @@
 # 贡献指南 · Contributing
 
-感谢关注 **AIvideo**。欢迎 Issue、文档改进、缺陷修复与协议测试补强。
+感谢关注 **镜语 · JingYu**。欢迎 Issue、文档改进、缺陷修复与协议测试补强。
 
 **唯一官方源码仓库（请使用此地址引用）**  
 https://gitee.com/withthesea/ai-diy-video

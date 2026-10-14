@@ -1,5 +1,5 @@
 <h1 align="center">
-  AIvideo
+  JingYu · 镜语
 </h1>
 
 <p align="center">
@@ -28,7 +28,7 @@ Open-source **local generation gateway** for Windows + NVIDIA (Apache-2.0): Olla
 | Runtime | Gateway `:18766` · Ollama `:11434` · ComfyUI `:8488` (same machine) |
 | Release | Engineering baseline `0.2.0` |
 
-## Why AIvideo
+## Why JingYu
 
 | Typical expectation | This project |
 |:---|:---|

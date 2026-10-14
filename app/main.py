@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 
 from app.api.routes import router, studio_page
 
-app = FastAPI(title="AI 漫剧本地制作系统", version="0.2.0")
+app = FastAPI(title="镜语 · JingYu", version="0.2.1")
 app.include_router(router)
 
 

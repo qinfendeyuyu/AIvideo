@@ -6,7 +6,7 @@
 
 | 字段 | 建议填写 |
 |:---|:---|
-| 仓库介绍 | `本地 AI 漫剧生成网关：Ollama + ComfyUI 静帧/短 I2V，内存预检与可恢复队列。Apache-2.0 · Windows+NVIDIA。` |
+| 仓库介绍 | `镜语 JingYu：本地 AI 漫剧生成网关，Ollama + ComfyUI 静帧/短 I2V，内存预检与可恢复队列。Apache-2.0 · Windows+NVIDIA。` |
 | 主页 | `https://gitee.com/withthesea/ai-diy-video` |
 | 开源许可 | Apache-2.0（与 LICENSE 一致） |
 
@@ -28,7 +28,7 @@
 ```bash
 git tag -a v0.2.0 -m "v0.2.0 engineering baseline"
 git push gitee v0.2.0
-gitee release create --tag v0.2.0 -n "AIvideo 0.2.0" -b "工程基线：README 体例、评测边界、自荐清单。详见 CHANGELOG。" --no-tui
+gitee release create --tag v0.2.1 -n "镜语 JingYu 0.2.1" -b "品牌更名镜语 · JingYu；样片与工程基线。详见 CHANGELOG。" --no-tui
 ```
 
 有至少一个正式版，编辑才会信「可交付」。

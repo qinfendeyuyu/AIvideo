@@ -1,11 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-10-14
+
+- **项目更名**：对外品牌定为 **镜语 · JingYu**（原展示名 AIvideo）；仓库地址暂不变。
+
 ## 0.2.0 — 2026-10-14
 
 - **开源工程基线**：按 IAS-DAS 文档体例重写 README / README.en；新增 `docs/EVALUATION.md`、`docs/ROADMAP.md`、`docs/项目简介.md`、Gitee 自荐与仓库设置稿、Issue 模板。
 - **社区文件**：`CONTRIBUTING.md` · `SECURITY.md` · `CODE_OF_CONDUCT.md` · `CONTRIBUTORS.md` · `CHANGELOG.md`。
 - **本地 Wan 批处理**：`scripts/run_wan_3min_batch.py` 支持帧数 / 步数 / 分辨率 CLI 覆盖（`4c8eeb3`）。
-- **文档素材**：操作动图与真实工作台截图已挂 README（不伪造成片成功态）。
+- **文档素材**：操作动图、真实工作台截图与本地 Wan 样片已挂 README。
 
 ## 0.1.0 — 2026-10-08
 
