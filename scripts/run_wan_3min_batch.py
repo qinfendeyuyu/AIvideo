@@ -80,19 +80,32 @@ def _build_workflow(
     frame_rate: float,
     seed: int,
     filename_prefix: str,
+    steps: int | None = None,
+    width: int | None = None,
+    height: int | None = None,
+    blocks_to_swap: int = 40,
 ) -> dict:
     wf = copy.deepcopy(json.loads(TEMPLATE_PATH.read_text(encoding="utf-8")))
     wf["1"]["inputs"]["positive_prompt"] = prompt
     wf["1"]["inputs"]["negative_prompt"] = negative
+    wf["1"]["inputs"]["device"] = "cpu"
     wf["3"]["inputs"]["image"] = start_rel
+    if width is not None:
+        wf["4"]["inputs"]["width"] = int(width)
+        wf["7"]["inputs"]["width"] = int(width)
+    if height is not None:
+        wf["4"]["inputs"]["height"] = int(height)
+        wf["7"]["inputs"]["height"] = int(height)
     wf["7"]["inputs"]["num_frames"] = int(num_frames)
     wf["7"]["inputs"]["tiled_vae"] = True
     wf["7"]["inputs"]["force_offload"] = True
-    wf["9"]["inputs"]["blocks_to_swap"] = 40
+    wf["9"]["inputs"]["blocks_to_swap"] = int(blocks_to_swap)
     wf["9"]["inputs"]["offload_img_emb"] = True
     wf["9"]["inputs"]["offload_txt_emb"] = True
     wf["11"]["inputs"]["seed"] = int(seed)
     wf["11"]["inputs"]["force_offload"] = True
+    if steps is not None:
+        wf["11"]["inputs"]["steps"] = int(steps)
     wf["12"]["inputs"]["enable_vae_tiling"] = True
     wf["13"]["inputs"]["filename_prefix"] = filename_prefix
     wf["13"]["inputs"]["frame_rate"] = float(frame_rate)
@@ -151,12 +164,13 @@ def run_batch(args: argparse.Namespace) -> int:
     shots: list[dict] = storyboard["shots"]
     char = storyboard["character_lock"]
     negative = storyboard["negative_prompt"]
-    num_frames = int(storyboard.get("num_frames") or 81)
+    num_frames = int(args.num_frames or storyboard.get("num_frames") or 81)
     fps = float(storyboard.get("native_fps") or 16)
     comfy = args.comfy.rstrip("/")
+    steps = int(args.steps) if args.steps else None
 
     print(
-        f"[3min] shots={len(shots)} frames={num_frames} fps={fps} "
+        f"[batch] shots={len(shots)} frames={num_frames} fps={fps} "
         f"~{len(shots) * num_frames / fps:.1f}s native → out={out_dir}"
     )
 
@@ -216,9 +230,17 @@ def run_batch(args: argparse.Namespace) -> int:
             frame_rate=fps,
             seed=int(shot["seed"]),
             filename_prefix=f"toonflow_local/{task_tag}",
+            steps=steps,
+            width=int(args.width) if args.width else None,
+            height=int(args.height) if args.height else None,
+            blocks_to_swap=int(args.blocks_to_swap),
         )
 
-        print(f"[run ] {idx + 1}/{len(shots)} {sid} seed={shot['seed']} start={start_src.name}")
+        print(
+            f"[run ] {idx + 1}/{len(shots)} {sid} frames={num_frames} "
+            f"seed={shot['seed']} start={start_src.name}",
+            flush=True,
+        )
         t0 = time.time()
         try:
             queued = _http_json(
@@ -276,7 +298,12 @@ def main() -> int:
     p.add_argument("--out-dir", default=str(DEFAULT_OUT))
     p.add_argument("--comfy", default="http://127.0.0.1:8188")
     p.add_argument("--ffmpeg", default=r"E:\FFmpeg\bin\ffmpeg.exe")
-    p.add_argument("--timeout-minutes", type=float, default=120.0)
+    p.add_argument("--timeout-minutes", type=float, default=180.0)
+    p.add_argument("--num-frames", type=int, default=0, help="0 = use storyboard")
+    p.add_argument("--steps", type=int, default=0, help="0 = template default")
+    p.add_argument("--width", type=int, default=0)
+    p.add_argument("--height", type=int, default=0)
+    p.add_argument("--blocks-to-swap", type=int, default=40)
     p.add_argument("--stop-on-fail", action="store_true")
     return run_batch(p.parse_args())
 
