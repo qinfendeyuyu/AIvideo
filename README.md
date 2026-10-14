@@ -46,8 +46,6 @@
 
 “免费”= 不调用按次收费模型 API；仍有硬件、电费、存储与人工成本。模型权重不随仓库分发。
 
-**自荐 / 仓库设置**：[docs/gitee-自荐文案.md](docs/gitee-自荐文案.md) · [docs/gitee-仓库设置.md](docs/gitee-仓库设置.md) · 边界见 [docs/EVALUATION.md](docs/EVALUATION.md)。
-
 ---
 
 ## 本地生成样片
