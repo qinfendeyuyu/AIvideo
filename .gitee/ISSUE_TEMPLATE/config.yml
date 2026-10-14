@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 部署与复现说明
+    url: https://gitee.com/withthesea/ai-diy-video/blob/main/docs/PUBLIC_DEPLOYMENT.md
+    about: 安装、ComfyUI 基线与复现限制
+  - name: 评测与诚实边界
+    url: https://gitee.com/withthesea/ai-diy-video/blob/main/docs/EVALUATION.md
+    about: 协议测试覆盖范围与未完成项

@@ -70,11 +70,12 @@ Python 3.12 · FastAPI · Ollama · ComfyUI · RealVisXL V5 · Wan2.1 I2V 14B FP
 
 ## 提交前检查清单
 
-- [ ] 仓库 About / 软件简介已改成上文「一句话」  
-- [ ] 已创建 Release / Tag（建议 `v0.2.0`），首页不是 No Releases  
-- [ ] 软件分类选人工智能 / 多媒体等贴近项，主页填 Gitee 地址  
-- [ ] 上传 `docs/screenshots/workbench-overview.png` 等截图；Issue 模板已配置  
-- [ ] 一句话里有 **协议 + 能跑 + 差异点**，没有「最强 / 一键精品 / 商用保证」空话  
+- [x] 仓库 About / 显示名已改为镜语 JingYu  
+- [x] 已创建 Release `v0.2.1`（空壳 1.0 已删）  
+- [ ] 开源软件分类选人工智能 / 多媒体等贴近项（网页填写）  
+- [x] Issue 模板已进 `.gitee/ISSUE_TEMPLATE/`  
+- [ ] 开源软件信息页上传截图并粘贴简介（网页）  
+- [ ] 一句话里有 **协议 + 能跑 + 差异点**，没有「最强 / 一键精品 / 商用保证」空话（提交自荐时核对）
 
 ## 备注栏三句（可粘贴）
 

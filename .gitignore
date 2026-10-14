@@ -35,6 +35,13 @@ data/inputs/training/
 !/tests/
 !/docs/
 !/assets/
+!/.gitee/
+.gitee/*
+!.gitee/ISSUE_TEMPLATE/
+.gitee/ISSUE_TEMPLATE/*
+!.gitee/ISSUE_TEMPLATE/bug.md
+!.gitee/ISSUE_TEMPLATE/feature.md
+!.gitee/ISSUE_TEMPLATE/config.yml
 
 /configs/*
 !/configs/models.example.yaml

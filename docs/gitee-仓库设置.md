@@ -35,12 +35,8 @@ gitee release create --tag v0.2.1 -n "镜语 JingYu 0.2.1" -b "品牌更名镜�
 
 ## 4. Issues / 可维护信号
 
-请在 **管理 → Issue 模板** 粘贴：
-
-- [`issue-templates/bug.md`](issue-templates/bug.md)
-- [`issue-templates/feature.md`](issue-templates/feature.md)
-
-并确认已开启 Issues；仓库内已有 `CONTRIBUTING.md`、`SECURITY.md`、`CODE_OF_CONDUCT.md`。
+Issue 模板已落在默认分支：`.gitee/ISSUE_TEMPLATE/`（`bug.md` · `feature.md` · `config.yml`）。  
+新建 Issue 时应能看到模板选择器。确认已开启 Issues；仓库内另有 `CONTRIBUTING.md`、`SECURITY.md`、`CODE_OF_CONDUCT.md`。
 
 ## 5. 自荐提交节奏
 
