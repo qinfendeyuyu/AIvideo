@@ -1,6 +1,15 @@
 AIvideo - Local AI Comic Drama Workbench
 Copyright 2026 AIvideo contributors
 
+本软件补充声明 / Additional Notice
+====================================
+
+1. 本软件永久免费，允许商业使用（须遵守 Apache License 2.0）。
+2. 作者已拥有本仓库自有代码与文档相关的知识产权（版权等作者享有的权利）。
+3. 任何个人与集体不可擅自将本仓库自有技术与代码另行申报为独占知识产权
+   （包括但不限于另行申报专利、软件著作权等）以排除他人按 Apache-2.0 使用。
+4. 模型权重、第三方依赖、字体、输入素材与生成输出不因本 NOTICE 被重新授权。
+
 Original project code and documentation are licensed under the Apache License,
 Version 2.0. See LICENSE. Third-party materials retain their own licenses;
 this notice does not relicense model weights, fonts, dependencies, or outputs.
