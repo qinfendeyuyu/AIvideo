@@ -47,10 +47,11 @@ Walkthrough GIF (real 503 on low memory): [`docs/screenshots/generation-walkthro
 
 ## Local samples
 
-**Wan 30s quality preview** — 6 chained I2V shots (480×832 · 16fps · RTX 4060 8GB), concat **18.4s**:
+**Wan 30s quality preview** — 6 chained I2V shots (480×832 · 16fps · RTX 4060 8GB), concat **18.4s**.
 
 <p align="center">
-  <video src="docs/samples/wan_30s_preview/preview_concat.mp4" controls width="100%" poster="docs/samples/wan_30s_preview/poster.png"></video>
+  <a href="https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/preview_concat.mp4"><img src="docs/samples/wan_30s_preview/poster.png" alt="Sample poster" width="360"/></a><br/>
+  <a href="https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/preview_concat.mp4"><strong>▶ Watch full concat (18.4s)</strong></a>
 </p>
 
 Engineering preview only — not a commercial-quality claim. Details: [docs/SAMPLES.md](docs/SAMPLES.md)

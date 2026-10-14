@@ -70,6 +70,9 @@ data/inputs/training/
 /docs/samples/wan_30s_preview/*
 !/docs/samples/wan_30s_preview/preview_concat.mp4
 !/docs/samples/wan_30s_preview/poster.png
+!/docs/samples/wan_30s_preview/poster_p01.png
+!/docs/samples/wan_30s_preview/poster_p03.png
+!/docs/samples/wan_30s_preview/poster_p06.png
 !/docs/samples/wan_30s_preview/manifest.json
 !/docs/samples/wan_30s_preview/clips/
 /docs/samples/wan_30s_preview/clips/*

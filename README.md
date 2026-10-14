@@ -50,18 +50,29 @@
 
 ## 本地生成样片
 
-**司天署·30 秒画质试片**（Wan2.1 I2V 14B FP8 · 480×832 · 16fps · RTX 4060 8GB）。6 镜顺序拼接，总长 **18.4s**：
+**司天署·30 秒画质试片**（Wan2.1 I2V 14B FP8 · 480×832 · 16fps · RTX 4060 8GB）。6 镜顺序拼接，总长 **18.4s**。
 
 <p align="center">
-  <video src="docs/samples/wan_30s_preview/preview_concat.mp4" controls width="100%" poster="docs/samples/wan_30s_preview/poster.png">
-    您的浏览器不支持内嵌播放，请直接打开
-    <a href="docs/samples/wan_30s_preview/preview_concat.mp4">preview_concat.mp4</a>
-  </video>
+  <a href="https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/preview_concat.mp4"><img src="docs/samples/wan_30s_preview/poster.png" alt="样片封面：点击观看完整拼接" width="360"/></a><br/>
+  <a href="https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/preview_concat.mp4"><strong>▶ 观看完整拼接预览（18.4s）</strong></a><br/>
+  <sub>
+    <a href="docs/samples/wan_30s_preview/preview_concat.mp4">仓库相对路径</a> ·
+    <a href="https://gitee.com/withthesea/ai-diy-video/raw/main/docs/samples/wan_30s_preview/preview_concat.mp4">Raw 下载</a>
+  </sub>
 </p>
+
+| 镜头 | 说明 | 在线打开 |
+|:---|:---|:---|
+| P01 | 睁眼 | [▶ 00_P01.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/00_P01.mp4) |
+| P02 | 侧耳 | [▶ 01_P02.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/01_P02.mp4) |
+| P03 | 侍从急报 | [▶ 02_P03.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/02_P03.mp4) |
+| P04 | 应答 | [▶ 03_P04.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/03_P04.mp4) |
+| P05 | 起身 | [▶ 04_P05.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/04_P05.mp4) |
+| P06 | 城门异光 | [▶ 05_P06.mp4](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/05_P06.mp4) |
 
 | P01 睁眼 | P03 侍从急报 | P06 城门异光 |
 |:---:|:---:|:---:|
-| <video src="docs/samples/wan_30s_preview/clips/00_P01.mp4" controls width="100%"></video> | <video src="docs/samples/wan_30s_preview/clips/02_P03.mp4" controls width="100%"></video> | <video src="docs/samples/wan_30s_preview/clips/05_P06.mp4" controls width="100%"></video> |
+| [![P01](docs/samples/wan_30s_preview/poster_p01.png)](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/00_P01.mp4) | [![P03](docs/samples/wan_30s_preview/poster_p03.png)](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/02_P03.mp4) | [![P06](docs/samples/wan_30s_preview/poster_p06.png)](https://gitee.com/withthesea/ai-diy-video/blob/main/docs/samples/wan_30s_preview/clips/05_P06.mp4) |
 
 > **工程预览，不是商用验收**：P01–P03 约 5s/镜，P04–P06 约 1s/镜（参数不一致）；P04–P05 为远程 harvest 后同步。仅证明本机链路能出片，不承诺干净新机复现或参考样片同等画质。分镜元数据见 [docs/SAMPLES.md](docs/SAMPLES.md)。
 
